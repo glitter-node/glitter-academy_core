@@ -1,0 +1,235 @@
+{
+  "meta": {
+    "is_partial": true
+  },
+  "type": "basic",
+  "name": "Div",
+  "if": "{{_local.boardAccess !== 'allowed'}}",
+  "props": {
+    "className": "min-h-[50vh] flex items-center justify-center px-4"
+  },
+  "children": [
+    {
+      "type": "basic",
+      "name": "P",
+      "if": "{{_local.boardAccess === 'checking'}}",
+      "props": {
+        "className": "text-slate-600 dark:text-slate-400"
+      },
+      "text": "$t:board.access.checking"
+    },
+    {
+      "type": "basic",
+      "name": "Div",
+      "if": "{{_local.boardAccess === 'missing'}}",
+      "props": {
+        "className": "text-center max-w-xl"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Icon",
+          "props": {
+            "name": "settings",
+            "className": "w-12 h-12 mx-auto mb-4 text-slate-400"
+          }
+        },
+        {
+          "type": "basic",
+          "name": "H1",
+          "props": {
+            "className": "text-2xl font-bold text-slate-900 dark:text-white mb-2"
+          },
+          "text": "$t:board.access.missing_title"
+        },
+        {
+          "type": "basic",
+          "name": "P",
+          "props": {
+            "className": "text-slate-600 dark:text-slate-400 mb-8"
+          },
+          "text": "$t:board.access.missing_description"
+        },
+        {
+          "type": "basic",
+          "name": "Button",
+          "if": "{{_global.currentUser?.permissions?.some(permission => permission.identifier === 'sirsoft-board.boards.create') && route.slug === 'qna'}}",
+          "props": {
+            "className": "inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer",
+            "disabled": "{{_local.setupState === 'creating' || _local.setupState === 'already_exists'}}"
+          },
+          "actions": [
+            {
+              "type": "click",
+              "handler": "sequence",
+              "actions": [
+                {
+                  "handler": "setState",
+                  "params": {
+                    "target": "local",
+                    "setupState": "creating"
+                  }
+                },
+                {
+                  "handler": "apiCall",
+                  "auth_required": true,
+                  "target": "/api/modules/sirsoft-board/admin/boards",
+                  "params": {
+                    "method": "POST",
+                    "body": {
+                      "name": {"ko": "{{true ? '$t:board.setup.name_ko' : ''}}", "en": "{{true ? '$t:board.setup.name_en' : ''}}"},
+                      "slug": "qna",
+                      "description": {"ko": "{{true ? '$t:board.setup.description_ko' : ''}}", "en": "{{true ? '$t:board.setup.description_en' : ''}}"},
+                      "is_active": true,
+                      "type": "basic",
+                      "secret_mode": "enabled",
+                      "show_view_count": true,
+                      "use_report": false,
+                      "use_file_upload": true,
+                      "max_file_size": 5,
+                      "max_file_count": 3,
+                      "allowed_extensions": ["jpg", "jpeg", "png", "pdf", "zip", "txt"],
+                      "board_manager_ids": ["{{_global.currentUser.uuid}}"],
+                      "board_step_ids": []
+                    }
+                  },
+                  "onSuccess": [
+                    {
+                      "handler": "setState",
+                      "params": {
+                        "target": "local",
+                        "setupState": "success",
+                        "boardAccess": "checking",
+                        "setupError": null
+                      }
+                    },
+                    {
+                      "handler": "toast",
+                      "params": {
+                        "type": "success",
+                        "message": "$t:board.access.setup_success"
+                      }
+                    },
+                    {
+                      "handler": "refetchDataSource",
+                      "params": {
+                        "dataSourceId": "boards"
+                      }
+                    },
+                    {
+                      "handler": "refetchDataSource",
+                      "params": {
+                        "dataSourceId": "board_access"
+                      }
+                    }
+                  ],
+                  "errorHandling": {
+                    "403": {
+                      "handler": "sequence",
+                      "actions": [
+                        {"handler": "setState", "params": {"target": "local", "setupState": "denied"}},
+                        {"handler": "toast", "params": {"type": "error", "message": "$t:board.access.setup_denied"}}
+                      ]
+                    },
+                    "default": {
+                      "handler": "sequence",
+                      "actions": [
+                        {"handler": "setState", "params": {"target": "local", "setupState": "already_exists", "boardAccess": "checking"}},
+                        {"handler": "refetchDataSource", "params": {"dataSourceId": "board_access"}}
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "children": [
+            {
+              "type": "basic",
+              "name": "Icon",
+              "props": {
+                "name": "spinner",
+                "className": "w-5 h-5 animate-spin"
+              },
+              "if": "{{_local.setupState === 'creating' || _local.setupState === 'already_exists'}}"
+            },
+            {
+              "type": "basic",
+              "name": "Span",
+              "text": "{{(_local.setupState === 'creating' || _local.setupState === 'already_exists') ? '$t:board.access.setting_up' : '$t:board.access.setup_action'}}"
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "name": "P",
+          "if": "{{!_global.currentUser?.permissions?.some(permission => permission.identifier === 'sirsoft-board.boards.create')}}",
+          "props": {
+            "className": "text-sm text-slate-500 dark:text-slate-400"
+          },
+          "text": "$t:board.access.admin_setup_required"
+        },
+        {
+          "type": "basic",
+          "name": "P",
+          "if": "{{_local.setupState === 'denied' || _local.setupState === 'failed'}}",
+          "props": {
+            "className": "mt-4 text-sm text-red-600 dark:text-red-400"
+          },
+          "text": "{{_local.setupState === 'denied' ? '$t:board.access.setup_denied' : '$t:board.access.setup_failed'}}"
+        }
+      ]
+    },
+    {
+      "type": "basic",
+      "name": "Div",
+      "if": "{{_local.boardAccess === 'denied'}}",
+      "props": {
+        "className": "text-center max-w-lg"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Icon",
+          "props": {
+            "name": "lock",
+            "className": "w-12 h-12 mx-auto mb-4 text-slate-400"
+          }
+        },
+        {
+          "type": "basic",
+          "name": "H1",
+          "props": {
+            "className": "text-2xl font-bold text-slate-900 dark:text-white mb-2"
+          },
+          "text": "$t:board.access.denied_title"
+        },
+        {
+          "type": "basic",
+          "name": "P",
+          "props": {
+            "className": "text-slate-600 dark:text-slate-400 mb-8"
+          },
+          "text": "$t:board.access.denied_description"
+        },
+        {
+          "type": "basic",
+          "name": "Button",
+          "props": {
+            "className": "inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 cursor-pointer"
+          },
+          "actions": [
+            {
+              "type": "click",
+              "handler": "navigate",
+              "params": {
+                "path": "/"
+              }
+            }
+          ],
+          "text": "$t:board.access.back_home"
+        }
+      ]
+    }
+  ]
+}

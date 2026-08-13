@@ -1,0 +1,294 @@
+{
+  "version": "1.0.0",
+  "layout_name": "mypage/reservations",
+  "extends": "_user_base",
+  "permissions": [],
+  "computed": {
+    "currentTab": "reservations"
+  },
+  "initLocal": {
+    "form": {
+      "customer_phone": ""
+    },
+    "reservations": [],
+    "errors": null,
+    "isLoading": false,
+    "lookupFailed": false,
+    "moduleUnavailable": false,
+    "hasSearched": false
+  },
+  "slots": {
+    "content": [
+      {
+        "type": "basic",
+        "name": "Div",
+        "props": {
+          "className": "min-h-screen bg-slate-50 dark:bg-slate-900"
+        },
+        "children": [
+          {
+            "type": "layout",
+            "name": "Container",
+            "props": {
+              "className": "py-8"
+            },
+            "children": [
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "flex items-center gap-2 mb-6"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Icon",
+                    "props": {
+                      "name": "calendar",
+                      "size": "xl",
+                      "className": "text-slate-900 dark:text-white"
+                    }
+                  },
+                  {
+                    "type": "basic",
+                    "name": "H1",
+                    "props": {
+                      "className": "text-2xl font-bold text-slate-900 dark:text-white"
+                    },
+                    "text": "$t:mypage.reservations.title"
+                  }
+                ]
+              },
+              {
+                "partial": "partials/mypage/_tab_navigation.json"
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 mb-6"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "text-slate-600 dark:text-slate-300 mb-5"
+                    },
+                    "text": "$t:mypage.reservations.subtitle"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "Form",
+                    "dataKey": "form",
+                    "props": {
+                      "className": "grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 items-end"
+                    },
+                    "actions": [
+                      {
+                        "type": "submit",
+                        "handler": "sequence",
+                        "actions": [
+                          {
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "isLoading": true,
+                              "lookupFailed": false,
+                              "moduleUnavailable": false,
+                              "errors": null,
+                              "hasSearched": false
+                            }
+                          },
+                          {
+                            "handler": "apiCall",
+                            "target": "/modules/glitter-reservation/reservation/bookings/lookup?customer_phone={{_local.form.customer_phone ?? ''}}",
+                            "params": {
+                              "method": "GET"
+                            },
+                            "onSuccess": [
+                              {
+                                "handler": "setState",
+                                "params": {
+                                  "target": "local",
+                                  "isLoading": false,
+                                  "hasSearched": true,
+                                  "reservations": "{{response.data?.data ?? response.data ?? []}}"
+                                }
+                              }
+                            ],
+                            "onError": [
+                              {
+                                "handler": "setState",
+                                "params": {
+                                  "target": "local",
+                                  "isLoading": false,
+                                  "hasSearched": true,
+                                  "lookupFailed": true,
+                                  "moduleUnavailable": "{{error.status === 404 || error.response?.status === 404}}",
+                                  "errors": "{{error.errors}}"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "Div",
+                        "children": [
+                          {
+                            "type": "basic",
+                            "name": "Label",
+                            "props": {
+                              "className": "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                            },
+                            "text": "$t:mypage.reservations.lookup_label"
+                          },
+                          {
+                            "type": "basic",
+                            "name": "Input",
+                            "props": {
+                              "type": "tel",
+                              "name": "customer_phone",
+                              "placeholder": "$t:mypage.reservations.lookup_placeholder",
+                              "className": "w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white",
+                              "required": true
+                            }
+                          },
+                          {
+                            "type": "basic",
+                            "name": "P",
+                            "if": "{{_local.errors?.customer_phone}}",
+                            "props": {
+                              "className": "mt-1 text-sm text-red-600 dark:text-red-400"
+                            },
+                            "text": "{{_local.errors.customer_phone?.[0] ?? _local.errors.customer_phone ?? ''}}"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Button",
+                        "props": {
+                          "type": "submit",
+                          "className": "px-4 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium disabled:opacity-50",
+                          "disabled": "{{_local.isLoading}}"
+                        },
+                        "text": "{{_local.isLoading ? '$t:mypage.reservations.lookup_processing' : '$t:mypage.reservations.lookup_submit'}}"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "if": "{{_local.moduleUnavailable}}",
+                "props": {
+                  "className": "p-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg mb-6"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "H2",
+                    "props": {
+                      "className": "text-xl font-semibold text-amber-900 dark:text-amber-100 mb-2"
+                    },
+                    "text": "$t:mypage.reservations.module_unavailable_title"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "text-amber-800 dark:text-amber-200"
+                    },
+                    "text": "$t:mypage.reservations.module_unavailable_body"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "if": "{{_local.lookupFailed && !_local.moduleUnavailable}}",
+                "props": {
+                  "className": "p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200 mb-6"
+                },
+                "text": "$t:mypage.reservations.lookup_failed"
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "if": "{{_local.hasSearched && (_local.reservations ?? []).length === 0 && !_local.lookupFailed}}",
+                "props": {
+                  "className": "p-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300"
+                },
+                "text": "$t:mypage.reservations.empty"
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "if": "{{(_local.reservations ?? []).length > 0}}",
+                "props": {
+                  "className": "grid grid-cols-1 gap-4"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "iteration": {
+                      "source": "{{_local.reservations ?? []}}",
+                      "item_var": "reservation"
+                    },
+                    "props": {
+                      "className": "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-5"
+                    },
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "H2",
+                        "props": {
+                          "className": "text-lg font-semibold text-slate-900 dark:text-white mb-2"
+                        },
+                        "text": "{{reservation?.service?.name ?? ''}}"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "props": {
+                          "className": "text-sm text-slate-600 dark:text-slate-300 mb-3"
+                        },
+                        "text": "{{reservation?.booking_date ?? ''}} {{reservation?.booking_time ?? ''}}"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Button",
+                        "props": {
+                          "type": "button",
+                          "className": "px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-medium"
+                        },
+                        "text": "$t:mypage.reservations.open_detail",
+                        "actions": [
+                          {
+                            "type": "click",
+                            "handler": "navigate",
+                            "params": {
+                              "path": "{{`/mypage/reservations/${reservation.id}`}}",
+                              "mergeQuery": false
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

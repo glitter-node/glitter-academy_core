@@ -1,0 +1,214 @@
+{
+  "home": {
+    "title": "Consultation Reservation Platform",
+    "body": "A GnuConsultation Area7 user template for education centers and academies that need consultation landing, reservable programs, availability guidance, member accounts, and reservation history.",
+    "programs_button": "View Reservable Programs",
+    "consultation_button": "Start Consultation"
+  },
+  "sections": {
+    "identity": {
+      "title": "What this template is",
+      "body": "Academy Core Template keeps the active glitter-academy_core template identity while shaping it for education and consultation service operations."
+    },
+    "auth": {
+      "title": "Authentication flow support",
+      "body": "Login, registration, password recovery, reset links, profile, and password change pages are included at template level."
+    },
+    "form": {
+      "title": "Stable form structure",
+      "body": "Main authentication forms use one form state with dataKey form so visible fields and submitted payloads stay aligned."
+    },
+    "cms_ready": {
+      "title": "CMS and API readiness",
+      "body": "The structure is prepared for consultation area notices, page content, program data, and module-backed operational APIs."
+    },
+    "extensible": {
+      "title": "Extensible structure",
+      "body": "Instructor, program, timetable, notice, FAQ, contact, and consultation pages are separated so site operators can replace static sections with CMS or module data."
+    },
+    "modules": {
+      "title": "Required and optional modules",
+      "body": "Consultation Area and Page modules are expected. Glitter Reservation and consultation modules are optional and degrade gracefully when unavailable."
+    },
+    "beta": {
+      "title": "Current beta status",
+      "body": "This template is a beta education-site example. Production operators should review content, permissions, notifications, mail delivery, and booking policies before launch."
+    }
+  },
+  "programs": {
+    "course": {
+      "title": "Education institute homepage",
+      "body": "Introduce core courses, admission flows, and operating policies with template-managed content."
+    },
+    "operation": {
+      "title": "Program operation site",
+      "body": "Use program, timetable, notice, and FAQ pages as the baseline for recurring education operations."
+    },
+    "mvp": {
+      "title": "Authentication-based MVP",
+      "body": "Use account pages and mypage flows as a starting point for beta services that need member access."
+    }
+  },
+  "reservation": {
+    "identity": {
+      "title": "Reservation platform identity",
+      "body": "Academy Core now centers the glitter-academy_core template around consultation reservation journeys while preserving the existing GnuConsultation Area7 template structure."
+    },
+    "landing": {
+      "step_label": "Reservation Start",
+      "title": "Start with email verification and choose an available consultation slot.",
+      "body": "The page connects to Glitter Reservation services, slot availability, email verification, booking creation, lookup, and cancellation APIs when the module is installed."
+    },
+    "login_required": {
+      "title": "Member access supported",
+      "body": "Visitors can start the public reservation flow, and signed-in members can review reservation history from mypage."
+    },
+    "module": {
+      "unavailable_title": "Reservation module unavailable",
+      "unavailable_body": "Live reservation features require the Glitter Reservation module. This page remains available and shows fallback guidance until the module routes are installed and services are published."
+    },
+    "services": {
+      "title": "Reservable consultation programs",
+      "body": "Published services from the reservation module appear here as bookable academy consultations.",
+      "empty": "No public reservation services are open yet.",
+      "duration": "Duration",
+      "duration_value": "Duration: {minutes} minutes",
+      "slot_interval": "Slot interval",
+      "slot_interval_value": "Slot interval: {minutes} minutes",
+      "booking_window": "Booking window",
+      "booking_window_value": "Booking window: {min}-{max} days",
+      "minutes": "minutes",
+      "days": "days",
+      "select": "Select Service"
+    },
+    "availability": {
+      "title": "Availability and schedule guidance",
+      "body": "Select a service and date from the consultation page to load live slots. Operators control schedules, holidays, breaks, and slot rules inside the reservation module.",
+      "published_services": "Published services",
+      "live_slots": "Live slot search",
+      "email_verification": "Email verification required",
+      "mypage_history": "Member reservation history"
+    },
+    "form": {
+      "verification_title": "Email verification",
+      "verification_body": "The reservation module requires a verified email before booking submission.",
+      "booking_title": "Reservation details",
+      "booking_body": "Choose a service, date, time slot, and contact information before submitting.",
+      "email": "Email Address",
+      "email_placeholder": "name@example.com",
+      "send_verification": "Send Verification Link",
+      "sending_verification": "Sending...",
+      "refresh_status": "Refresh Verification Status",
+      "verified_email": "Verified Email",
+      "verified_notice": "Email verification is complete. Continue with reservation details.",
+      "verification_sent": "A verification link has been sent to your email address.",
+      "verification_failed": "Verification email could not be sent.",
+      "verification_refresh_failed": "Verification status could not be refreshed.",
+      "service": "Consultation Service",
+      "service_placeholder": "Select a service",
+      "date": "Booking Date",
+      "check_slots": "Check Available Slots",
+      "checking_slots": "Checking...",
+      "slots": "Available Time Slots",
+      "no_slots": "No consultation slots are open for the selected date.",
+      "slot_failed": "Available time slots could not be loaded.",
+      "name": "Student or Guardian Name",
+      "name_placeholder": "Enter the booking name",
+      "phone": "Phone Number",
+      "phone_placeholder": "01012345678",
+      "email_readonly": "Verified email is submitted with the reservation.",
+      "memo": "Consultation Notes",
+      "memo_placeholder": "Share learning concerns, target subject, and scheduling notes.",
+      "submit": "Submit Consultation Reservation",
+      "submitting": "Submitting...",
+      "success": "Consultation reservation has been submitted.",
+      "failed": "Consultation reservation could not be submitted.",
+      "reference": "Reservation reference",
+      "reference_value": "Reservation reference: {id}",
+      "status": "Status"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "completed": "Completed",
+      "no_show": "No-show"
+    },
+    "operation": {
+      "title": "Operation checklist",
+      "body": "Before launch, seed public services, define schedules and holidays, verify mail delivery, review cancellation policy, and confirm staff notification routing.",
+      "scope_title": "Included and excluded scope",
+      "scope_body": "The template includes reservation-facing pages and module API bindings. Full CRM, payment, attendance, LMS, and staff workflow customization remain outside template scope.",
+      "beta_title": "Beta operation notice",
+      "beta_body": "This is a beta reservation platform template. Confirm module data, validation messages, email verification, and cancellation policy before production use."
+    }
+  },
+  "faq": {
+    "scope": {
+      "question": "What is included?",
+      "answer": "Public pages, authentication pages, mypage profile/password pages, and a consultation fallback page are included."
+    },
+    "modules": {
+      "question": "What is excluded?",
+      "answer": "Full academy ERP, payment, attendance, LMS, and custom consultation workflow logic are outside the template scope."
+    }
+  },
+  "consultation": {
+    "unavailable_title": "Reservation module required",
+    "unavailable_body": "Consultation booking is ready to connect to Glitter Reservation. Enable the module and seed public services to show live booking options.",
+    "service_title_fallback": "Consultation Service",
+    "service_body_fallback": "This service is available for consultation booking."
+  },
+  "pages": {
+    "about": {
+      "meta_title": "About Academy Core",
+      "meta_description": "Academy Core Template introduction",
+      "title": "About Academy Core",
+      "subtitle": "A focused GnuConsultation Area7 user template for education institutes, academies, program sites, and consultation-based services."
+    },
+    "programs": {
+      "meta_title": "Programs",
+      "meta_description": "Program operation overview",
+      "title": "Programs",
+      "subtitle": "Organize courses, tracks, cohorts, and beta service offers with a structure ready for CMS or API integration."
+    },
+    "instructors": {
+      "meta_title": "Instructors",
+      "meta_description": "Instructor introduction page",
+      "title": "Instructors",
+      "subtitle": "Use this page as an instructor profile directory or connect it to a module-backed staff API."
+    },
+    "timetable": {
+      "meta_title": "Timetable",
+      "meta_description": "Timetable and operation schedule",
+      "title": "Timetable",
+      "subtitle": "Publish class schedules, consultation slots, operational periods, and intake calendars."
+    },
+    "notices": {
+      "meta_title": "Notices",
+      "meta_description": "Academy notices",
+      "title": "Notices",
+      "subtitle": "Connect this page to the consultation area module for announcements, admissions updates, and operation notices.",
+      "board_button": "Open Notice Consultation Area"
+    },
+    "faq": {
+      "meta_title": "FAQ",
+      "meta_description": "Frequently asked questions",
+      "title": "FAQ",
+      "subtitle": "Explain the included template scope, optional modules, and launch checklist for operators."
+    },
+    "contact": {
+      "meta_title": "Contact",
+      "meta_description": "Contact and inquiry page",
+      "title": "Contact",
+      "subtitle": "Provide institute contact details or route visitors into consultation booking.",
+      "consultation_button": "Request Consultation"
+    },
+    "consultation": {
+      "meta_title": "Consultation",
+      "meta_description": "Consultation booking",
+      "title": "Consultation",
+      "subtitle": "Connect reservation services or a custom consultation module when the operational flow is ready."
+    }
+  }
+}

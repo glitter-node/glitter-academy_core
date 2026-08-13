@@ -1,0 +1,77 @@
+{
+    "identifier": "glitter-academy_core",
+    "vendor": "Glitter.kr",
+    "name": {
+        "ko": "아카데미 코어 템플릿",
+        "en": "Academy Core Template"
+    },
+  "version": "1.0.0-beta.6",
+    "license": "MIT",
+    "description": {
+        "ko": "그누보드7 상담 예약 플랫폼 템플릿",
+        "en": "GnuBoard7 consultation reservation platform template"
+    },
+    "type": "user",
+    "locales": ["ko", "en"],
+    "author": {
+        "name": "Glitter.kr",
+        "email": "admin@glitter.kr",
+        "url": "https://glitter.kr"
+    },
+  "release_date": "2026-08-13",
+  "g7_version": ">=7.0.6",
+    "dependencies": {
+        "modules": {
+      "sirsoft-board": ">=1.0.3",
+      "sirsoft-page": ">=1.0.2",
+      "glitter-reservation": ">=0.2.4"
+        },
+        "plugins": {
+      "sirsoft-daum_postcode": ">=1.0.1"
+        }
+    },
+    "assets": {
+        "css": ["dist/css/components.css"],
+        "js": ["dist/js/components.iife.js"],
+        "fonts": [],
+        "images": []
+    },
+    "components": {
+        "basic": [
+            "a", "badge", "button", "checkbox", "div", "form",
+            "h1", "h2", "h3", "h4", "hr", "icon", "img", "input",
+            "label", "li", "nav", "p", "section",
+            "select", "span", "svg", "table", "tbody",
+            "td", "textarea", "th", "thead", "tr", "ul"
+        ],
+        "composite": [
+            "header", "footer", "mobile-nav",
+            "rich-text-editor", "image-gallery",
+            "quantity-selector", "post-reactions", "social-login-buttons",
+            "file-uploader", "card", "modal", "toast", "pagination",
+            "stat-card", "status-badge", "tab-navigation", "empty-state",
+            "loading-spinner", "breadcrumb", "search-bar", "dropdown"
+        ],
+        "layout": [
+            "container", "flex", "grid", "section"
+        ]
+    },
+    "error_config": {
+        "layouts": {
+            "401": "errors/401",
+            "404": "errors/404",
+            "403": "errors/403",
+            "500": "errors/500",
+            "503": "errors/503",
+            "maintenance": "errors/maintenance"
+        }
+    },
+    "features": {
+        "dark_mode": true,
+        "responsive": true,
+        "multi_language": true,
+        "multi_currency": false
+    },
+  "github_url": "https://github.com/glitter-node/glitter-academy_core",
+  "github_changelog_url": "https://github.com/glitter-node/glitter-academy_core/blob/main/CHANGELOG.md"
+}

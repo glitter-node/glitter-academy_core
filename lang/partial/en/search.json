@@ -1,0 +1,45 @@
+{
+  "title": "Search",
+  "placeholder": "Enter search term",
+  "button": "Search",
+  "submit": "Search",
+  "results": "Search Results",
+  "results_count": "{{count}} results",
+  "result_summary": "{{count}} results found",
+  "result_count_suffix": " results found",
+  "no_results": "No results found.",
+  "try_different": "Try a different search term.",
+  "tabs": {
+    "all": "All",
+    "posts": "Consultation Requests",
+    "pages": "Pages"
+  },
+  "filter": {
+    "all": "All",
+    "posts": "Consultation Requests",
+    "all_boards": "All Consultation Areas"
+  },
+  "sort": {
+    "relevance": "Relevance",
+    "latest": "Latest",
+    "popular": "Popular"
+  },
+  "empty": {
+    "all": "No results found.",
+    "posts": "No requests found.",
+    "pages": "No pages found.",
+    "posts_in_all": "No requests found",
+    "pages_in_all": "No pages found",
+    "suggestion": "Try a different search term"
+  },
+  "page_published_at": "Published: {{date}}",
+  "view_more": "View more",
+  "view_all": "View all",
+  "initial": {
+    "title": "Enter a search term",
+    "description": "Search requests and pages all at once.",
+    "hint_title": "Search Tips",
+    "hint_1": "Use multiple words for more accurate results",
+    "hint_2": "Search covers both titles and content"
+  }
+}

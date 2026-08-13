@@ -1,0 +1,664 @@
+{
+  "meta": {
+    "is_partial": true
+  },
+  "type": "basic",
+  "name": "Div",
+  "props": {
+    "className": "-mx-4 grid grid-cols-1 gap-8 rounded-3xl border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-900/5 dark:border-slate-700 dark:bg-slate-800 dark:shadow-black/20 sm:-mx-6 sm:p-8 lg:-mx-8 lg:grid-cols-2 lg:items-center lg:gap-10 lg:p-10"
+  },
+  "children": [
+    {
+      "type": "basic",
+      "name": "Div",
+      "props": {
+        "className": "min-w-0"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Div",
+          "props": {
+            "className": "mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700 dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "Icon",
+              "props": {
+                "name": "calendar",
+                "className": "h-4 w-4"
+              }
+            },
+            {
+              "type": "basic",
+              "name": "Span",
+              "props": {
+                "className": "text-sm font-semibold"
+              },
+              "text": "$t:home.community_landing"
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "name": "H2",
+          "props": {
+            "className": "max-w-xl text-4xl font-bold leading-tight text-slate-950 dark:text-white sm:text-5xl lg:text-5xl xl:text-6xl"
+          },
+          "text": "$t:home.hero_title"
+        },
+        {
+          "type": "basic",
+          "name": "P",
+          "props": {
+            "className": "mt-5 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-lg"
+          },
+          "text": "$t:home.hero_description"
+        },
+        {
+          "type": "basic",
+          "name": "Div",
+          "props": {
+            "className": "mt-7 max-w-2xl"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "Div",
+              "if": "{{!_global.currentUser?.uuid}}",
+              "props": {
+                "className": "flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
+              },
+              "children": [
+                {
+                  "type": "basic",
+                  "name": "P",
+                  "props": {
+                    "className": "text-sm font-medium text-slate-500 dark:text-slate-400 sm:basis-full"
+                  },
+                  "text": "$t:home.smart_cta.guest_message"
+                },
+                {
+                  "type": "basic",
+                  "name": "Button",
+                  "props": {
+                    "variant": "primary",
+                    "size": "md",
+                    "className": "inline-flex min-h-12 w-full items-center justify-center gap-2 self-start rounded-full bg-emerald-600 px-6 font-semibold text-white shadow-lg shadow-emerald-600/20 transition-colors hover:bg-emerald-700 sm:w-auto"
+                  },
+                  "actions": [
+                    {
+                      "type": "click",
+                      "handler": "navigate",
+                      "params": {
+                        "path": "/login",
+                        "query": {
+                          "redirect": "/board/qna/write"
+                        }
+                      }
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Span",
+                      "text": "$t:home.smart_cta.guest_button"
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Icon",
+                      "props": {
+                        "name": "log-in",
+                        "className": "h-4 w-4"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "basic",
+                  "name": "Button",
+                  "props": {
+                    "variant": "secondary",
+                    "size": "md",
+                    "className": "inline-flex min-h-12 w-full items-center justify-center gap-2 self-start rounded-full border border-emerald-200 bg-white px-6 font-semibold text-emerald-700 shadow-sm transition-colors hover:bg-emerald-50 dark:border-emerald-700 dark:bg-slate-900 dark:text-emerald-300 dark:hover:bg-slate-800 sm:w-auto"
+                  },
+                  "actions": [
+                    {
+                      "type": "click",
+                      "handler": "navigate",
+                      "params": {
+                        "path": "/timetable"
+                      }
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Span",
+                      "text": "$t:home.smart_cta.secondary_button"
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Icon",
+                      "props": {
+                        "name": "clock",
+                        "className": "h-4 w-4"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "basic",
+              "name": "Div",
+              "if": "{{_global.currentUser?.uuid && (((_global.currentUser?.posts_count ?? _global.currentUser?.post_count ?? _global.currentUser?.activity_count ?? 0) + (_global.currentUser?.comments_count ?? _global.currentUser?.comment_count ?? 0)) === 0)}}",
+              "props": {
+                "className": "flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
+              },
+              "children": [
+                {
+                  "type": "basic",
+                  "name": "P",
+                  "props": {
+                    "className": "text-sm font-medium text-slate-500 dark:text-slate-400 sm:basis-full"
+                  },
+                  "text": "$t:home.smart_cta.new_member_message"
+                },
+                {
+                  "type": "basic",
+                  "name": "Button",
+                  "props": {
+                    "variant": "primary",
+                    "size": "md",
+                    "className": "inline-flex min-h-12 w-full items-center justify-center gap-2 self-start rounded-full bg-emerald-600 px-6 font-semibold text-white shadow-lg shadow-emerald-600/20 transition-colors hover:bg-emerald-700 sm:w-auto"
+                  },
+                  "actions": [
+                    {
+                      "type": "click",
+                      "handler": "navigate",
+                      "params": {
+                        "path": "/board/qna/write"
+                      }
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Span",
+                      "text": "$t:home.smart_cta.new_member_button"
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Icon",
+                      "props": {
+                        "name": "circle-help",
+                        "className": "h-4 w-4"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "basic",
+                  "name": "Button",
+                  "props": {
+                    "variant": "secondary",
+                    "size": "md",
+                    "className": "inline-flex min-h-12 w-full items-center justify-center gap-2 self-start rounded-full border border-emerald-200 bg-white px-6 font-semibold text-emerald-700 shadow-sm transition-colors hover:bg-emerald-50 dark:border-emerald-700 dark:bg-slate-900 dark:text-emerald-300 dark:hover:bg-slate-800 sm:w-auto"
+                  },
+                  "actions": [
+                    {
+                      "type": "click",
+                      "handler": "navigate",
+                      "params": {
+                        "path": "/timetable"
+                      }
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Span",
+                      "text": "$t:home.smart_cta.secondary_button"
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Icon",
+                      "props": {
+                        "name": "clock",
+                        "className": "h-4 w-4"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "basic",
+              "name": "Div",
+              "if": "{{_global.currentUser?.uuid && (((_global.currentUser?.posts_count ?? _global.currentUser?.post_count ?? _global.currentUser?.activity_count ?? 0) + (_global.currentUser?.comments_count ?? _global.currentUser?.comment_count ?? 0)) > 0)}}",
+              "props": {
+                "className": "flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
+              },
+              "children": [
+                {
+                  "type": "basic",
+                  "name": "P",
+                  "props": {
+                    "className": "text-sm font-medium text-slate-500 dark:text-slate-400 sm:basis-full"
+                  },
+                  "text": "$t:home.smart_cta.active_member_message"
+                },
+                {
+                  "type": "basic",
+                  "name": "Button",
+                  "props": {
+                    "variant": "primary",
+                    "size": "md",
+                    "className": "inline-flex min-h-12 w-full items-center justify-center gap-2 self-start rounded-full bg-emerald-600 px-6 font-semibold text-white shadow-lg shadow-emerald-600/20 transition-colors hover:bg-emerald-700 sm:w-auto"
+                  },
+                  "actions": [
+                    {
+                      "type": "click",
+                      "handler": "navigate",
+                      "params": {
+                        "path": "/board/{{_global.lastVisitedBoardSlug ?? recent_posts?.data?.[0]?.board_slug ?? 'free'}}"
+                      }
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Span",
+                      "text": "$t:home.smart_cta.active_member_button"
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Icon",
+                      "props": {
+                        "name": "arrow-right",
+                        "className": "h-4 w-4"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "basic",
+                  "name": "Button",
+                  "props": {
+                    "variant": "secondary",
+                    "size": "md",
+                    "className": "inline-flex min-h-12 w-full items-center justify-center gap-2 self-start rounded-full border border-emerald-200 bg-white px-6 font-semibold text-emerald-700 shadow-sm transition-colors hover:bg-emerald-50 dark:border-emerald-700 dark:bg-slate-900 dark:text-emerald-300 dark:hover:bg-slate-800 sm:w-auto"
+                  },
+                  "actions": [
+                    {
+                      "type": "click",
+                      "handler": "navigate",
+                      "params": {
+                        "path": "/timetable"
+                      }
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Span",
+                      "text": "$t:home.smart_cta.secondary_button"
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Icon",
+                      "props": {
+                        "name": "clock",
+                        "className": "h-4 w-4"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "name": "Div",
+          "props": {
+            "className": "mt-6 flex items-start gap-3 rounded-2xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-sm text-slate-600 dark:border-emerald-800/70 dark:bg-emerald-950/30 dark:text-slate-300"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "Icon",
+              "props": {
+                "name": "check",
+                "className": "mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
+              }
+            },
+            {
+              "type": "basic",
+              "name": "Span",
+              "text": "$t:home.hero_footer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "basic",
+      "name": "Div",
+      "props": {
+        "className": "relative min-h-96 overflow-hidden rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-5 shadow-inner dark:border-slate-700 dark:from-slate-900 dark:via-slate-900 dark:to-emerald-950/40 sm:p-6"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Div",
+          "props": {
+            "className": "absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-200/50 blur-2xl dark:bg-emerald-700/20"
+          }
+        },
+        {
+          "type": "basic",
+          "name": "Div",
+          "props": {
+            "className": "absolute -bottom-12 left-8 h-40 w-40 rounded-full bg-teal-200/40 blur-2xl dark:bg-teal-700/20"
+          }
+        },
+        {
+          "type": "basic",
+          "name": "Div",
+          "props": {
+            "className": "relative z-10 mx-auto max-w-md"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "Div",
+              "props": {
+                "className": "rounded-3xl border border-white/80 bg-white/95 p-5 shadow-2xl shadow-emerald-900/10 dark:border-slate-700 dark:bg-slate-800/95 dark:shadow-black/30"
+              },
+              "children": [
+                {
+                  "type": "basic",
+                  "name": "Div",
+                  "props": {
+                    "className": "mb-5 flex items-start justify-between gap-4"
+                  },
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Div",
+                      "children": [
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "props": {
+                            "className": "block text-xs font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-300"
+                          },
+                          "text": "$t:home.hero_visual.status_label"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "props": {
+                            "className": "mt-1 block text-lg font-bold text-slate-950 dark:text-white"
+                          },
+                          "text": "$t:home.hero_visual.date_value"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Span",
+                      "props": {
+                        "className": "rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-700 dark:bg-teal-900/40 dark:text-teal-200"
+                      },
+                      "text": "$t:home.hero_visual.date_label"
+                    }
+                  ]
+                },
+                {
+                  "type": "basic",
+                  "name": "Div",
+                  "props": {
+                    "className": "rounded-3xl bg-emerald-600 p-5 text-white shadow-xl shadow-emerald-600/20"
+                  },
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Div",
+                      "props": {
+                        "className": "mb-5 flex items-center justify-between gap-3"
+                      },
+                      "children": [
+                        {
+                          "type": "basic",
+                          "name": "Div",
+                          "props": {
+                            "className": "flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20"
+                          },
+                          "children": [
+                            {
+                              "type": "basic",
+                              "name": "Icon",
+                              "props": {
+                                "name": "calendar",
+                                "className": "h-6 w-6"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "props": {
+                            "className": "rounded-full bg-white/20 px-3 py-1 text-xs font-semibold"
+                          },
+                          "text": "$t:home.hero_visual.schedule_title"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "basic",
+                      "name": "P",
+                      "props": {
+                        "className": "text-2xl font-bold leading-snug"
+                      },
+                      "text": "$t:home.hero_visual.slot_morning"
+                    },
+                    {
+                      "type": "basic",
+                      "name": "P",
+                      "props": {
+                        "className": "mt-2 text-sm font-medium text-emerald-50"
+                      },
+                      "text": "$t:home.hero_visual.slot_afternoon"
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Div",
+                      "props": {
+                        "className": "mt-5 grid grid-cols-7 gap-2"
+                      },
+                      "children": [
+                        {
+                          "type": "basic",
+                          "name": "Div",
+                          "props": {
+                            "className": "h-2 rounded-full bg-white/50"
+                          }
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Div",
+                          "props": {
+                            "className": "h-2 rounded-full bg-white/70"
+                          }
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Div",
+                          "props": {
+                            "className": "h-2 rounded-full bg-white"
+                          }
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Div",
+                          "props": {
+                            "className": "h-2 rounded-full bg-white/70"
+                          }
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Div",
+                          "props": {
+                            "className": "h-2 rounded-full bg-white/50"
+                          }
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Div",
+                          "props": {
+                            "className": "h-2 rounded-full bg-white/30"
+                          }
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Div",
+                          "props": {
+                            "className": "h-2 rounded-full bg-white/30"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "basic",
+                  "name": "Div",
+                  "props": {
+                    "className": "mt-5 flex items-center gap-3 rounded-2xl bg-emerald-50 p-3 dark:bg-emerald-950/30"
+                  },
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Div",
+                      "props": {
+                        "className": "flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-white dark:bg-emerald-700"
+                      },
+                      "text": "$t:home.hero_visual.expert_initial"
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Div",
+                      "props": {
+                        "className": "min-w-0"
+                      },
+                      "children": [
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "props": {
+                            "className": "block text-xs font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-300"
+                          },
+                          "text": "$t:home.hero_visual.expert_title"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "props": {
+                            "className": "block truncate text-sm font-semibold text-slate-950 dark:text-white"
+                          },
+                          "text": "$t:home.hero_visual.expert_name"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "props": {
+                            "className": "block truncate text-xs text-slate-500 dark:text-slate-400"
+                          },
+                          "text": "$t:home.hero_visual.expert_role"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "basic",
+              "name": "Div",
+              "props": {
+                "className": "-mt-3 ml-auto mr-3 max-w-xs rounded-3xl rounded-tr-sm bg-white px-4 py-3 text-sm leading-6 text-slate-600 shadow-xl shadow-emerald-900/10 dark:bg-slate-800 dark:text-slate-300 dark:shadow-black/30"
+              },
+              "children": [
+                {
+                  "type": "basic",
+                  "name": "Div",
+                  "props": {
+                    "className": "mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-300"
+                  },
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Icon",
+                      "props": {
+                        "name": "message-square",
+                        "className": "h-4 w-4"
+                      }
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Span",
+                      "text": "$t:home.hero_visual.chat_label"
+                    }
+                  ]
+                },
+                {
+                  "type": "basic",
+                  "name": "P",
+                  "text": "$t:home.hero_visual.chat_text"
+                }
+              ]
+            },
+            {
+              "type": "basic",
+              "name": "Div",
+              "props": {
+                "className": "mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3"
+              },
+              "children": [
+                {
+                  "type": "basic",
+                  "name": "Div",
+                  "props": {
+                    "className": "rounded-full bg-white/80 px-3 py-2 text-center text-xs font-semibold text-emerald-700 shadow-sm dark:bg-slate-800/90 dark:text-emerald-300"
+                  },
+                  "text": "$t:home.hero_visual.step_1"
+                },
+                {
+                  "type": "basic",
+                  "name": "Div",
+                  "props": {
+                    "className": "rounded-full bg-white/80 px-3 py-2 text-center text-xs font-semibold text-teal-700 shadow-sm dark:bg-slate-800/90 dark:text-teal-300"
+                  },
+                  "text": "$t:home.hero_visual.step_2"
+                },
+                {
+                  "type": "basic",
+                  "name": "Div",
+                  "props": {
+                    "className": "rounded-full bg-slate-900 px-3 py-2 text-center text-xs font-semibold text-white shadow-sm dark:bg-emerald-700"
+                  },
+                  "text": "$t:home.hero_visual.step_3"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "base_layout_title": "Gnuboard7",
+  "base_layout_description": "Gnuboard7 consultation booking platform",
+  "menu": "Menu",
+  "search_placeholder": "Enter search term",
+  "profile": {
+    "page_title": "User Profile",
+    "posts_page_title": "Consultation Requests",
+    "user_not_found": "User not found.",
+    "joined_at": "Joined:",
+    "posts_count": "Requests",
+    "comments_count": "Responses",
+    "recent_posts": "Recent Consultation Requests",
+    "posts_suffix": " Consultation Requests",
+    "posts_title_for_user": "{{name}} Consultation Requests",
+    "total_posts": "Total {{count}} requests",
+    "no_posts": "No consultation requests yet.",
+    "view_all": "View All",
+    "back_to_profile": "Profile",
+    "back_to_profile_for_user": "{{name}} Profile",
+    "post_board": "Consultation Area",
+    "post_title": "Consultation Title",
+    "post_views": "Views",
+    "post_date": "Date",
+    "badge_blinded": "Blinded",
+    "boards": "Consultation Areas",
+    "refund": "Consultation Operating Policy"
+  },
+  "nav": {
+    "home": "Home",
+    "popular": "Popular Consultations",
+    "boards": "Consultation Center",
+    "mypage": "My Bookings"
+  },
+  "footer": {
+    "info": "Guide",
+    "about": "About Service",
+    "faq": "Consultation FAQ",
+    "contact": "Contact Consultation Center",
+    "policy": "Policy",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "refund": "Consultation Operating Policy"
+  },
+  "page": {
+    "page_title": "Page",
+    "not_found_title": "Page Not Found",
+    "not_found_description": "The page you requested does not exist or has been deleted.",
+    "back_to_home": "Back to Home",
+    "admin_edit": "Edit",
+    "status_active": "Active",
+    "published_at": "Published",
+    "create_page": "Create Page",
+    "attachments": "Attachments",
+    "download": "Download"
+  },
+  "mypage": {
+    "page_title": "My Page",
+    "profile_title": "Profile",
+    "profile_edit_title": "Edit Profile",
+    "change_password_title": "Change Password",
+    "notifications_title": "Notifications",
+    "board_title": "Consultation Activity"
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "meta": {
+    "is_partial": true
+  },
+  "type": "basic",
+  "name": "Div",
+  "props": {
+    "className": "bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700"
+  },
+  "children": [
+    {
+      "type": "basic",
+      "name": "H3",
+      "props": {
+        "className": "text-base font-semibold text-slate-900 dark:text-white flex items-center gap-2 mb-3"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Icon",
+          "props": {
+            "name": "building",
+            "className": "w-4 h-4 text-teal-500"
+          }
+        },
+        {
+          "type": "basic",
+          "name": "Span",
+          "text": "$t:home.community_guide"
+        }
+      ]
+    },
+    {
+      "type": "basic",
+      "name": "Ul",
+      "props": {
+        "className": "space-y-2 text-sm text-slate-600 dark:text-slate-400"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Li",
+          "props": {
+            "className": "flex items-start gap-2"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "Span",
+              "props": {
+                "className": "text-green-500 mt-0.5"
+              },
+              "text": "$t:home.guide_bullet"
+            },
+            {
+              "type": "basic",
+              "name": "Span",
+              "text": "$t:home.guide_rule_1"
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "name": "Li",
+          "props": {
+            "className": "flex items-start gap-2"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "Span",
+              "props": {
+                "className": "text-red-500 mt-0.5"
+              },
+              "text": "$t:home.guide_bullet"
+            },
+            {
+              "type": "basic",
+              "name": "Span",
+              "text": "$t:home.guide_rule_2"
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "name": "Li",
+          "props": {
+            "className": "flex items-start gap-2"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "Span",
+              "props": {
+                "className": "text-red-500 mt-0.5"
+              },
+              "text": "$t:home.guide_bullet"
+            },
+            {
+              "type": "basic",
+              "name": "Span",
+              "text": "$t:home.guide_rule_3"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

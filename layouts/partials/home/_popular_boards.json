@@ -1,0 +1,221 @@
+{
+  "meta": {
+    "is_partial": true
+  },
+  "type": "basic",
+  "name": "Div",
+  "props": {
+    "className": "bg-slate-50 dark:bg-slate-800 rounded-xl p-4 shadow-md border border-slate-200/70 dark:border-slate-700 h-full flex flex-col transition-all hover:shadow-lg"
+  },
+  "children": [
+    {
+      "type": "basic",
+      "name": "H3",
+      "props": {
+        "className": "text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2 mb-3"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Icon",
+          "props": {
+            "name": "flame",
+            "className": "w-5 h-5 text-orange-500"
+          }
+        },
+        {
+          "type": "basic",
+          "name": "Span",
+          "text": "$t:home.popular_boards"
+        }
+      ]
+    },
+    {
+      "type": "basic",
+      "name": "Div",
+      "if": "{{(popular_boards?.data ?? []).length > 0}}",
+      "props": {
+        "className": "space-y-2 mb-1"
+      },
+      "iteration": {
+        "source": "{{popular_boards?.data ?? []}}",
+        "item_var": "board",
+        "index_var": "index"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Button",
+          "props": {
+            "className": "w-full text-left flex items-center justify-between py-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-colors cursor-pointer"
+          },
+          "actions": [
+            {
+              "type": "click",
+              "handler": "navigate",
+              "params": {
+                "path": "/board/{{board?.slug ?? ''}}"
+              }
+            }
+          ],
+          "children": [
+            {
+              "type": "basic",
+              "name": "Div",
+              "props": {
+                "className": "flex items-center gap-3 flex-1 min-w-0"
+              },
+              "children": [
+                {
+                  "type": "basic",
+                  "name": "Span",
+                  "props": {
+                    "className": "w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs font-medium text-slate-600 dark:text-slate-300"
+                  },
+                  "text": "{{index + 1}}"
+                },
+                {
+                  "type": "basic",
+                  "name": "Span",
+                  "if": "{{(board?.slug ?? '') === 'notice'}}",
+                  "props": {
+                    "className": "text-sm font-medium text-slate-900 dark:text-white"
+                  },
+                  "text": "$t:boards.notice"
+                },
+                {
+                  "type": "basic",
+                  "name": "Span",
+                  "if": "{{(board?.slug ?? '') === 'free'}}",
+                  "props": {
+                    "className": "text-sm font-medium text-slate-900 dark:text-white"
+                  },
+                  "text": "$t:boards.free"
+                },
+                {
+                  "type": "basic",
+                  "name": "Span",
+                  "if": "{{(board?.slug ?? '') === 'qna'}}",
+                  "props": {
+                    "className": "text-sm font-medium text-slate-900 dark:text-white"
+                  },
+                  "text": "$t:boards.qna"
+                },
+                {
+                  "type": "basic",
+                  "name": "Span",
+                  "if": "{{(board?.slug ?? '') === 'resources'}}",
+                  "props": {
+                    "className": "text-sm font-medium text-slate-900 dark:text-white"
+                  },
+                  "text": "$t:boards.resources"
+                },
+                {
+                  "type": "basic",
+                  "name": "Span",
+                  "if": "{{(board?.slug ?? '') === 'introductions'}}",
+                  "props": {
+                    "className": "text-sm font-medium text-slate-900 dark:text-white"
+                  },
+                  "text": "$t:boards.introductions"
+                },
+                {
+                  "type": "basic",
+                  "name": "Span",
+                  "if": "{{(board?.slug ?? '') === 'support'}}",
+                  "props": {
+                    "className": "text-sm font-medium text-slate-900 dark:text-white"
+                  },
+                  "text": "$t:boards.support"
+                },
+                {
+                  "type": "basic",
+                  "name": "Span",
+                  "if": "{{!['notice','free','qna','resources','introductions','support'].includes(board?.slug ?? '')}}",
+                  "props": {
+                    "className": "text-sm font-medium text-slate-900 dark:text-white"
+                  },
+                  "text": "{{board?.name ?? ''}}"
+                }
+              ]
+            },
+            {
+              "type": "basic",
+              "name": "Span",
+              "props": {
+                "className": "text-xs font-medium text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 px-2 py-1 rounded"
+              },
+              "text": "{{board?.posts_count ?? 0 | number}}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "basic",
+      "name": "Div",
+      "if": "{{(popular_boards?.data ?? []).length === 0}}",
+      "props": {
+        "className": "text-center py-7 px-4 text-slate-500 dark:text-slate-400 flex-grow flex flex-col items-center justify-center min-h-[180px] rounded-lg border border-dashed border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/30"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Icon",
+          "props": {
+            "name": "bar-chart-3",
+            "className": "w-8 h-8 mx-auto mb-3 text-orange-500"
+          }
+        },
+        {
+          "type": "basic",
+          "name": "H4",
+          "props": {
+            "className": "text-sm font-semibold text-slate-900 dark:text-white mb-1"
+          },
+          "text": "$t:home.popular_boards_empty_title"
+        },
+        {
+          "type": "basic",
+          "name": "P",
+          "props": {
+            "className": "text-sm max-w-sm"
+          },
+          "text": "$t:home.popular_boards_empty_description"
+        },
+        {
+          "type": "basic",
+          "name": "Button",
+          "props": {
+            "type": "button",
+            "className": "mt-4 inline-flex items-center gap-1 text-sm font-medium text-teal-600 dark:text-teal-400 hover:underline cursor-pointer"
+          },
+          "actions": [
+            {
+              "type": "click",
+              "handler": "navigate",
+              "params": {
+                "path": "/boards"
+              }
+            }
+          ],
+          "children": [
+            {
+              "type": "basic",
+              "name": "Span",
+              "text": "$t:home.empty_browse_boards"
+            },
+            {
+              "type": "basic",
+              "name": "Icon",
+              "props": {
+                "name": "arrow-right",
+                "className": "w-4 h-4"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

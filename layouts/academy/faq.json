@@ -1,0 +1,98 @@
+{
+  "version": "1.0.0",
+  "layout_name": "academy/faq",
+  "extends": "_user_base",
+  "meta": {
+    "title": "$t:academy.pages.faq.meta_title",
+    "description": "$t:academy.pages.faq.meta_description"
+  },
+  "data_sources": [],
+  "slots": {
+    "content": [
+      {
+        "type": "layout",
+        "name": "Container",
+        "props": {
+          "className": "py-10 px-4"
+        },
+        "children": [
+          {
+            "type": "basic",
+            "name": "H1",
+            "props": {
+              "className": "text-3xl font-bold text-slate-900 dark:text-white mb-3"
+            },
+            "text": "$t:academy.pages.faq.title"
+          },
+          {
+            "type": "basic",
+            "name": "P",
+            "props": {
+              "className": "text-lg text-slate-600 dark:text-slate-300 mb-8 max-w-3xl"
+            },
+            "text": "$t:academy.pages.faq.subtitle"
+          },
+          {
+            "type": "basic",
+            "name": "Div",
+            "props": {
+              "className": "space-y-4"
+            },
+            "children": [
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "H2",
+                    "props": {
+                      "className": "text-lg font-semibold text-slate-900 dark:text-white mb-2"
+                    },
+                    "text": "$t:academy.faq.scope.question"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "text-slate-600 dark:text-slate-300"
+                    },
+                    "text": "$t:academy.faq.scope.answer"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "H2",
+                    "props": {
+                      "className": "text-lg font-semibold text-slate-900 dark:text-white mb-2"
+                    },
+                    "text": "$t:academy.faq.modules.question"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "text-slate-600 dark:text-slate-300"
+                    },
+                    "text": "$t:academy.faq.modules.answer"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

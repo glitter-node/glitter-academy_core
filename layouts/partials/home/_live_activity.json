@@ -1,0 +1,268 @@
+{
+  "meta": {
+    "is_partial": true
+  },
+  "type": "basic",
+  "name": "Div",
+  "props": {
+    "className": "bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-200 dark:border-slate-700"
+  },
+  "children": [
+    {
+      "type": "basic",
+      "name": "Div",
+      "props": {
+        "className": "flex items-center justify-between gap-3 mb-3"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "H2",
+          "props": {
+            "className": "text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "Icon",
+              "props": {
+                "name": "chart-line",
+                "size": "sm",
+                "className": "text-teal-500"
+              }
+            },
+            {
+              "type": "basic",
+              "name": "Span",
+              "text": "$t:home.live_activity.title"
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "name": "Span",
+          "props": {
+            "className": "text-xs font-medium text-teal-600 dark:text-teal-400"
+          },
+          "text": "$t:home.live_activity.status"
+        }
+      ]
+    },
+    {
+      "type": "basic",
+      "name": "Ul",
+      "if": "{{(recent_posts?.data ?? []).length > 0}}",
+      "props": {
+        "className": "divide-y divide-slate-200 dark:divide-slate-700 border-y border-slate-200 dark:border-slate-700"
+      },
+      "iteration": {
+        "source": "{{(recent_posts?.data ?? []).slice(0, 4)}}",
+        "item_var": "activity"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Li",
+          "props": {
+            "className": "py-3"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "Button",
+              "props": {
+                "type": "button",
+                "className": "w-full text-left flex items-start gap-3 cursor-pointer"
+              },
+              "actions": [
+                {
+                  "type": "click",
+                  "handler": "navigate",
+                  "params": {
+                    "path": "/board/{{activity?.board_slug ?? ''}}/{{activity?.id ?? ''}}"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "type": "basic",
+                  "name": "Span",
+                  "props": {
+                    "className": "mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-50 text-teal-600 dark:bg-teal-950/40 dark:text-teal-300"
+                  },
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Icon",
+                      "if": "{{(activity?.comment_count ?? 0) === 0}}",
+                      "props": {
+                        "name": "message-square",
+                        "size": "sm"
+                      }
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Icon",
+                      "if": "{{(activity?.comment_count ?? 0) > 0}}",
+                      "props": {
+                        "name": "comments",
+                        "size": "sm"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "basic",
+                  "name": "Div",
+                  "props": {
+                    "className": "min-w-0 flex-1"
+                  },
+                  "children": [
+                    {
+                      "type": "basic",
+                      "name": "Div",
+                      "props": {
+                        "className": "flex flex-wrap items-center gap-x-2 gap-y-1 text-sm"
+                      },
+                      "children": [
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "props": {
+                            "className": "font-semibold text-slate-900 dark:text-white"
+                          },
+                          "text": "{{activity?.author?.name ?? activity?.author_name ?? ''}}"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "if": "{{(activity?.comment_count ?? 0) === 0}}",
+                          "props": {
+                            "className": "text-slate-600 dark:text-slate-400"
+                          },
+                          "text": "$t:home.live_activity.new_post"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "if": "{{(activity?.comment_count ?? 0) > 0}}",
+                          "props": {
+                            "className": "text-slate-600 dark:text-slate-400"
+                          },
+                          "text": "$t:home.live_activity.new_comment"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "if": "{{(activity?.board_slug ?? '') === 'notice'}}",
+                          "props": {
+                            "className": "text-slate-500 dark:text-slate-400"
+                          },
+                          "text": "$t:boards.notice"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "if": "{{(activity?.board_slug ?? '') === 'free'}}",
+                          "props": {
+                            "className": "text-slate-500 dark:text-slate-400"
+                          },
+                          "text": "$t:boards.free"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "if": "{{(activity?.board_slug ?? '') === 'qna'}}",
+                          "props": {
+                            "className": "text-slate-500 dark:text-slate-400"
+                          },
+                          "text": "$t:boards.qna"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "if": "{{(activity?.board_slug ?? '') === 'resources'}}",
+                          "props": {
+                            "className": "text-slate-500 dark:text-slate-400"
+                          },
+                          "text": "$t:boards.resources"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "if": "{{(activity?.board_slug ?? '') === 'introductions'}}",
+                          "props": {
+                            "className": "text-slate-500 dark:text-slate-400"
+                          },
+                          "text": "$t:boards.introductions"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "if": "{{(activity?.board_slug ?? '') === 'support'}}",
+                          "props": {
+                            "className": "text-slate-500 dark:text-slate-400"
+                          },
+                          "text": "$t:boards.support"
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "if": "{{!['notice','free','qna','resources','introductions','support'].includes(activity?.board_slug ?? '')}}",
+                          "props": {
+                            "className": "text-slate-500 dark:text-slate-400"
+                          },
+                          "text": "{{activity?.board_name ?? ''}}"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "basic",
+                      "name": "Div",
+                      "props": {
+                        "className": "mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 dark:text-slate-400"
+                      },
+                      "children": [
+                        {
+                          "type": "basic",
+                          "name": "Span",
+                          "text": "{{activity?.created_at_formatted ?? ''}}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "basic",
+      "name": "Div",
+      "if": "{{(recent_posts?.data ?? []).length === 0}}",
+      "props": {
+        "className": "border-y border-dashed border-slate-200 py-5 text-center dark:border-slate-700"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "P",
+          "props": {
+            "className": "text-sm font-medium text-slate-900 dark:text-white"
+          },
+          "text": "$t:home.live_activity.empty_title"
+        },
+        {
+          "type": "basic",
+          "name": "P",
+          "props": {
+            "className": "mt-1 text-sm text-slate-500 dark:text-slate-400"
+          },
+          "text": "$t:home.live_activity.empty_description"
+        }
+      ]
+    }
+  ]
+}
