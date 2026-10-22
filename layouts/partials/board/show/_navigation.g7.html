@@ -1,0 +1,32 @@
+<partial>
+  <div class="flex items-center justify-between mb-6">
+    <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-white bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition-all shadow-sm cursor-pointer">
+      <on type="click">
+        <navigate path="/board/{{route.slug}}"/>
+      </on>
+      <icon name="list" size="sm"/>
+      <span>$t:board.back_to_list</span>
+    </button>
+    <span class="text-lg font-semibold text-slate-900 dark:text-white">{{post?.data?.board?.name ?? ''}}</span>
+    <div class="flex items-center gap-2">
+      <button data-if="{{navigation?.data?.prev?.id}}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-white bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition-all shadow-sm cursor-pointer">
+        <on type="click">
+          <navigate path="/board/{{route.slug}}/{{navigation.data.prev.id}}">
+            <query del="{{query.del ?? ''}}"/>
+          </navigate>
+        </on>
+        <icon data-type="composite" name="chevron-left" size="sm"/>
+        <span>$t:board.prev</span>
+      </button>
+      <button data-if="{{navigation?.data?.next?.id}}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-white bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition-all shadow-sm cursor-pointer">
+        <on type="click">
+          <navigate path="/board/{{route.slug}}/{{navigation.data.next.id}}">
+            <query del="{{query.del ?? ''}}"/>
+          </navigate>
+        </on>
+        <span>$t:board.next</span>
+        <icon data-type="composite" name="chevron-right" size="sm"/>
+      </button>
+    </div>
+  </div>
+</partial>

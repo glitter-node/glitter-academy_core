@@ -1,0 +1,14 @@
+<partial>
+  <div>
+    <include src="partials/board/show/_navigation.g7.html"/>
+    <div data-if="{{post?.data?.board?.type === 'basic' || !['gallery','card'].includes(post?.data?.board?.type ?? 'basic')}}">
+      <include src="partials/board/types/basic/show.g7.html"/>
+    </div>
+    <div data-if="{{post?.data?.board?.type === 'gallery'}}">
+      <include src="partials/board/types/basic/show.g7.html"/>
+    </div>
+    <div data-if="{{post?.data?.board?.type === 'card'}}">
+      <include src="partials/board/types/basic/show.g7.html"/>
+    </div>
+  </div>
+</partial>

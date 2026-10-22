@@ -1,0 +1,28 @@
+<partial>
+  <div data-if="{{query?.q &amp;&amp; searchResults?.data}}">
+    <div data-if="{{(_global.searchActiveTab ?? 'all') === 'all' &amp;&amp; (searchResults?.data?.total ?? 0) > 0}}" class="space-y-6">
+      <include src="partials/search/posts/_section.g7.html"/>
+      <include src="partials/search/pages/_section.g7.html"/>
+    </div>
+    <div data-if="{{_global.searchActiveTab === 'posts' &amp;&amp; (searchResults?.data?.posts_count ?? 0) > 0}}">
+      <include src="partials/search/posts/_list.g7.html"/>
+    </div>
+    <div data-if="{{_global.searchActiveTab === 'posts' &amp;&amp; (searchResults?.data?.posts_count ?? 0) === 0}}" class="py-16 text-center">
+      <div class="mb-5 text-slate-300 dark:text-slate-600">
+        <icon name="file-text" size="4x"/>
+      </div>
+      <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-2">$t:search.empty.posts</h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400">$t:search.empty.suggestion</p>
+    </div>
+    <div data-if="{{_global.searchActiveTab === 'pages' &amp;&amp; (searchResults?.data?.pages_count ?? 0) > 0}}">
+      <include src="partials/search/pages/_section.g7.html"/>
+    </div>
+    <div data-if="{{_global.searchActiveTab === 'pages' &amp;&amp; (searchResults?.data?.pages_count ?? 0) === 0}}" class="py-16 text-center">
+      <div class="mb-5 text-slate-300 dark:text-slate-600">
+        <icon name="file-alt" size="4x"/>
+      </div>
+      <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-2">$t:search.empty.pages</h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400">$t:search.empty.suggestion</p>
+    </div>
+  </div>
+</partial>

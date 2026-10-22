@@ -1,0 +1,52 @@
+<partial>
+  <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 shadow-md border border-slate-200/70 dark:border-slate-700 h-full flex flex-col transition-all hover:shadow-lg">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+        <icon name="clock" class="w-5 h-5 text-slate-500 dark:text-slate-400"/>
+        <span>$t:home.recent_posts</span>
+      </h3>
+      <button class="text-sm text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1 cursor-pointer">
+        <on type="click">
+          <navigate path="/boards/popular"/>
+        </on>
+        <span>$t:common.more</span>
+        <icon name="arrow-right" class="w-4 h-4"/>
+      </button>
+    </div>
+    <div data-if="{{(recent_posts?.data ?? []).filter(function(post){return (post?.board_slug ?? '') !== 'notice';}).length > 0}}" data-each="post in {{(recent_posts?.data ?? []).filter(function(post){return (post?.board_slug ?? '') !== 'notice';})}}" class="space-y-2 mb-1">
+      <button class="block w-full text-left hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg py-2 transition-colors cursor-pointer">
+        <on type="click">
+          <navigate path="/board/{{post?.board_slug ?? ''}}/{{post?.id ?? ''}}"/>
+        </on>
+        <div class="flex items-center justify-between gap-2 text-xs">
+          <div class="flex items-center gap-2 flex-1 min-w-0">
+            <span data-if="{{(post?.board_slug ?? '') === 'notice'}}" class="text-teal-600 dark:text-teal-400 shrink-0">$t:boards.notice</span>
+            <span data-if="{{(post?.board_slug ?? '') === 'free'}}" class="text-teal-600 dark:text-teal-400 shrink-0">$t:boards.free</span>
+            <span data-if="{{(post?.board_slug ?? '') === 'qna'}}" class="text-teal-600 dark:text-teal-400 shrink-0">$t:boards.qna</span>
+            <span data-if="{{(post?.board_slug ?? '') === 'resources'}}" class="text-teal-600 dark:text-teal-400 shrink-0">$t:boards.resources</span>
+            <span data-if="{{(post?.board_slug ?? '') === 'introductions'}}" class="text-teal-600 dark:text-teal-400 shrink-0">$t:boards.introductions</span>
+            <span data-if="{{(post?.board_slug ?? '') === 'support'}}" class="text-teal-600 dark:text-teal-400 shrink-0">$t:boards.support</span>
+            <span data-if="{{!['notice','free','qna','resources','introductions','support'].includes(post?.board_slug ?? '')}}" class="text-teal-600 dark:text-teal-400 shrink-0">{{post?.board_name ?? ''}}</span>
+            <icon data-if="{{post?.is_secret ?? false}}" name="lock" class="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0"/>
+            <span class="text-sm font-medium text-slate-900 dark:text-white text-left line-clamp-1">{{post?.title ?? ''}}</span>
+            <span data-if="{{post?.is_new ?? false}}" class="px-1.5 py-0.5 text-xs bg-red-500 text-white rounded shrink-0">$t:board.new_badge</span>
+            <span data-if="{{(post?.comment_count ?? 0) > 0}}" class="text-xs font-medium text-teal-500 dark:text-teal-400 shrink-0">$t:home.comment_count_badge|count={{post?.comment_count ?? 0}}</span>
+          </div>
+          <span class="text-xs text-slate-500 dark:text-slate-400 shrink-0" title="{{post?.created_at ?? ''}}">{{post?.created_at_formatted ?? ''}}</span>
+        </div>
+      </button>
+    </div>
+    <div data-if="{{(recent_posts?.data ?? []).filter(function(post){return (post?.board_slug ?? '') !== 'notice';}).length === 0}}" class="text-center py-7 px-4 text-slate-500 dark:text-slate-400 flex-grow flex flex-col items-center justify-center min-h-[180px] rounded-lg border border-dashed border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/30">
+      <icon name="message-square-plus" class="w-8 h-8 mx-auto mb-3 text-teal-500 dark:text-teal-400"/>
+      <h4 class="text-sm font-semibold text-slate-900 dark:text-white mb-1">$t:home.recent_posts_empty_title</h4>
+      <p class="text-sm max-w-sm">$t:home.recent_posts_empty_description</p>
+      <button type="button" class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-teal-600 dark:text-teal-400 hover:underline cursor-pointer">
+        <on type="click">
+          <navigate path="/boards"/>
+        </on>
+        <span>$t:home.empty_browse_boards</span>
+        <icon name="arrow-right" class="w-4 h-4"/>
+      </button>
+    </div>
+  </div>
+</partial>

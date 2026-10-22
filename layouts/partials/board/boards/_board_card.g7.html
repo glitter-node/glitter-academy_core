@@ -1,0 +1,38 @@
+<partial>
+  <div class="block w-full text-left bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-5 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-sm transition-all">
+    <responsive on="portable" class="block w-full text-left bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-sm transition-all"/>
+    <div class="flex items-start justify-between mb-2">
+      <div class="flex items-center gap-2">
+        <icon name="file-text" size="lg" class="text-slate-600 dark:text-slate-400 flex-shrink-0"/>
+        <h3 class="font-semibold text-slate-900 dark:text-white">{{board.name}}</h3>
+      </div>
+      <span class="px-2 py-0.5 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded">$t:board.post_count|count={{board.posts_count ?? 0}}</span>
+    </div>
+    <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-3">{{board.description ?? ''}}</p>
+    <div class="mb-4 flex flex-wrap gap-2">
+      <span data-if="{{board.slug === 'notice'}}" class="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">$t:board.directory.groups.announcements</span>
+      <span data-if="{{board.slug === 'free'}}" class="rounded-full bg-sky-50 px-2 py-0.5 text-xs font-medium text-sky-700 dark:bg-sky-900/30 dark:text-sky-300">$t:board.directory.groups.discussion</span>
+      <span data-if="{{board.slug === 'qna'}}" class="rounded-full bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">$t:board.directory.groups.questions</span>
+      <span data-if="{{board.slug === 'resources'}}" class="rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">$t:board.directory.groups.resources</span>
+      <span data-if="{{board.slug === 'introductions'}}" class="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">$t:board.directory.groups.introductions</span>
+      <span data-if="{{board.slug === 'support'}}" class="rounded-full bg-rose-50 px-2 py-0.5 text-xs font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">$t:board.directory.groups.support</span>
+      <span data-if="{{!['notice','free','qna','resources','introductions','support'].includes(board.slug)}}" class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300">$t:board.directory.groups.other</span>
+    </div>
+    <div class="flex flex-wrap items-center justify-end gap-2">
+      <button type="button" class="inline-flex items-center gap-1.5 rounded-md border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700">
+        <on type="click">
+          <navigate path="/board/{{board.slug}}"/>
+        </on>
+        <span>$t:board.view_board</span>
+        <icon name="arrow-right" size="sm"/>
+      </button>
+      <button data-if="{{board?.user_abilities?.can_write === true || board?.abilities?.can_write === true}}" type="button" class="inline-flex items-center gap-1.5 rounded-md bg-teal-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-teal-700 dark:bg-teal-500 dark:text-slate-950 dark:hover:bg-teal-400">
+        <on type="click">
+          <navigate path="/board/{{board.slug}}/write"/>
+        </on>
+        <icon name="square-pen" size="sm"/>
+        <span>$t:board.write</span>
+      </button>
+    </div>
+  </div>
+</partial>

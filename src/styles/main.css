@@ -1,0 +1,320 @@
+@import 'tailwindcss';
+
+@variant dark (.dark &);
+
+@source "./safelist.txt";
+
+@theme {
+  --color-primary-50: #f0fdfa;
+  --color-primary-100: #ccfbf1;
+  --color-primary-200: #99f6e4;
+  --color-primary-300: #5eead4;
+  --color-primary-400: #2dd4bf;
+  --color-primary-500: #14b8a6;
+  --color-primary-600: #0d9488;
+  --color-primary-700: #0f766e;
+  --color-primary-800: #115e59;
+  --color-primary-900: #134e4a;
+  --color-primary-950: #042f2e;
+
+  --color-success-50: #f0fdf4;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+
+  --color-warning-50: #fff7ed;
+  --color-warning-500: #f97316;
+  --color-warning-600: #ea580c;
+
+  --color-danger-50: #fef2f2;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+}
+
+@layer base {
+  :root {
+    --background: 255 255 255;
+    --foreground: 17 24 39;
+  }
+
+  .dark {
+    --background: 17 24 39;
+    --foreground: 255 255 255;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) {
+    @apply bg-white text-slate-900 dark:bg-slate-900 dark:text-white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) a {
+    @apply text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300;
+    text-decoration: none;
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) :focus-visible {
+    @apply outline-2 outline-offset-2 outline-teal-500;
+  }
+}
+
+@layer utilities {
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+@layer components {
+  body:has([data-template-id="glitter-academy_core"]) .variant-primary {
+    --btn-primary-bg: var(--color-primary-700);
+    --btn-primary-hover-bg: var(--color-primary-800);
+    --variant-bg: var(--btn-primary-bg);
+    --variant-bg-hover: var(--btn-primary-hover-bg);
+    --variant-fg: var(--color-white);
+    --variant-ring: var(--color-primary-500);
+    --variant-border: transparent;
+    --variant-soft-bg: var(--color-primary-100);
+    --variant-soft-fg: var(--color-primary-800);
+  }
+
+  .dark body:has([data-template-id="glitter-academy_core"]) .variant-primary,
+  body.dark:has([data-template-id="glitter-academy_core"]) .variant-primary,
+  body:has([data-template-id="glitter-academy_core"]) .dark .variant-primary {
+    --btn-primary-bg: var(--color-primary-700);
+    --btn-primary-hover-bg: var(--color-primary-800);
+    --variant-bg: var(--btn-primary-bg);
+    --variant-bg-hover: var(--btn-primary-hover-bg);
+    --variant-ring: var(--color-primary-400);
+    --variant-soft-bg: var(--color-primary-900);
+    --variant-soft-fg: var(--color-primary-100);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .variant-secondary {
+    --variant-bg: var(--color-slate-100);
+    --variant-bg-hover: var(--color-slate-200);
+    --variant-fg: var(--color-slate-900);
+    --variant-ring: var(--color-slate-500);
+    --variant-border: transparent;
+    --variant-soft-bg: var(--color-slate-100);
+    --variant-soft-fg: var(--color-slate-700);
+  }
+
+  .dark body:has([data-template-id="glitter-academy_core"]) .variant-secondary,
+  body.dark:has([data-template-id="glitter-academy_core"]) .variant-secondary,
+  body:has([data-template-id="glitter-academy_core"]) .dark .variant-secondary {
+    --variant-bg: var(--color-slate-700);
+    --variant-bg-hover: var(--color-slate-600);
+    --variant-fg: var(--color-white);
+    --variant-ring: var(--color-slate-400);
+    --variant-soft-bg: var(--color-slate-700);
+    --variant-soft-fg: var(--color-slate-200);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .variant-success {
+    --variant-bg: var(--color-success-600);
+    --variant-bg-hover: var(--color-success-500);
+    --variant-fg: var(--color-white);
+    --variant-ring: var(--color-success-500);
+    --variant-border: transparent;
+    --variant-soft-bg: var(--color-success-50);
+    --variant-soft-fg: var(--color-success-600);
+  }
+
+  .dark body:has([data-template-id="glitter-academy_core"]) .variant-success,
+  body.dark:has([data-template-id="glitter-academy_core"]) .variant-success,
+  body:has([data-template-id="glitter-academy_core"]) .dark .variant-success {
+    --variant-bg: var(--color-success-500);
+    --variant-bg-hover: var(--color-success-600);
+    --variant-soft-bg: color-mix(in srgb, var(--color-success-600) 28%, transparent);
+    --variant-soft-fg: var(--color-success-50);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .variant-warning {
+    --variant-bg: var(--color-warning-600);
+    --variant-bg-hover: var(--color-warning-500);
+    --variant-fg: var(--color-white);
+    --variant-ring: var(--color-warning-500);
+    --variant-border: transparent;
+    --variant-soft-bg: var(--color-warning-50);
+    --variant-soft-fg: var(--color-warning-600);
+  }
+
+  .dark body:has([data-template-id="glitter-academy_core"]) .variant-warning,
+  body.dark:has([data-template-id="glitter-academy_core"]) .variant-warning,
+  body:has([data-template-id="glitter-academy_core"]) .dark .variant-warning {
+    --variant-bg: var(--color-warning-500);
+    --variant-bg-hover: var(--color-warning-600);
+    --variant-soft-bg: color-mix(in srgb, var(--color-warning-600) 28%, transparent);
+    --variant-soft-fg: var(--color-warning-50);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .variant-danger {
+    --variant-bg: var(--color-danger-600);
+    --variant-bg-hover: var(--color-danger-500);
+    --variant-fg: var(--color-white);
+    --variant-ring: var(--color-danger-500);
+    --variant-border: transparent;
+    --variant-soft-bg: var(--color-danger-50);
+    --variant-soft-fg: var(--color-danger-600);
+  }
+
+  .dark body:has([data-template-id="glitter-academy_core"]) .variant-danger,
+  body.dark:has([data-template-id="glitter-academy_core"]) .variant-danger,
+  body:has([data-template-id="glitter-academy_core"]) .dark .variant-danger {
+    --variant-bg: var(--color-danger-500);
+    --variant-bg-hover: var(--color-danger-600);
+    --variant-soft-bg: color-mix(in srgb, var(--color-danger-600) 28%, transparent);
+    --variant-soft-fg: var(--color-danger-50);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .variant-neutral {
+    --variant-bg: var(--color-slate-600);
+    --variant-bg-hover: var(--color-slate-700);
+    --variant-fg: var(--color-white);
+    --variant-ring: var(--color-slate-500);
+    --variant-border: transparent;
+    --variant-soft-bg: var(--color-slate-100);
+    --variant-soft-fg: var(--color-slate-700);
+  }
+
+  .dark body:has([data-template-id="glitter-academy_core"]) .variant-neutral,
+  body.dark:has([data-template-id="glitter-academy_core"]) .variant-neutral,
+  body:has([data-template-id="glitter-academy_core"]) .dark .variant-neutral {
+    --variant-bg: var(--color-slate-500);
+    --variant-bg-hover: var(--color-slate-600);
+    --variant-ring: var(--color-slate-400);
+    --variant-soft-bg: var(--color-slate-700);
+    --variant-soft-fg: var(--color-slate-200);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .variant-ghost {
+    --variant-bg: transparent;
+    --variant-bg-hover: var(--color-slate-100);
+    --variant-fg: var(--color-slate-700);
+    --variant-ring: var(--color-slate-500);
+    --variant-border: transparent;
+    --variant-soft-bg: transparent;
+    --variant-soft-fg: var(--color-slate-700);
+  }
+
+  .dark body:has([data-template-id="glitter-academy_core"]) .variant-ghost,
+  body.dark:has([data-template-id="glitter-academy_core"]) .variant-ghost,
+  body:has([data-template-id="glitter-academy_core"]) .dark .variant-ghost {
+    --variant-bg-hover: var(--color-slate-800);
+    --variant-fg: var(--color-slate-300);
+    --variant-ring: var(--color-slate-400);
+    --variant-soft-fg: var(--color-slate-300);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .variant-outline {
+    --variant-bg: transparent;
+    --variant-bg-hover: var(--color-slate-100);
+    --variant-fg: var(--color-slate-700);
+    --variant-ring: var(--color-slate-500);
+    --variant-border: var(--color-slate-300);
+    --variant-soft-bg: transparent;
+    --variant-soft-fg: var(--color-slate-700);
+  }
+
+  .dark body:has([data-template-id="glitter-academy_core"]) .variant-outline,
+  body.dark:has([data-template-id="glitter-academy_core"]) .variant-outline,
+  body:has([data-template-id="glitter-academy_core"]) .dark .variant-outline {
+    --variant-bg-hover: var(--color-slate-800);
+    --variant-fg: var(--color-slate-300);
+    --variant-ring: var(--color-slate-400);
+    --variant-border: var(--color-slate-600);
+    --variant-soft-fg: var(--color-slate-300);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .btn {
+    @apply inline-flex items-center justify-center font-medium rounded-lg transition-colors border;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    background-color: var(--variant-bg);
+    color: var(--variant-fg);
+    border-color: var(--variant-border);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .btn:hover {
+    background-color: var(--variant-bg-hover);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .btn:focus {
+    --tw-ring-color: var(--variant-ring);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .input {
+    @apply w-full px-4 py-2 rounded-lg border border-slate-300;
+    @apply bg-white text-slate-900;
+    @apply focus:border-teal-500 focus:ring-1 focus:ring-teal-500;
+    @apply dark:bg-slate-800 dark:border-slate-600 dark:text-white;
+    @apply placeholder:text-slate-400 dark:placeholder:text-slate-500;
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .input-error {
+    @apply border-red-500 focus:border-red-500 focus:ring-red-500;
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .card {
+    @apply bg-white rounded-lg border border-slate-200 shadow-sm;
+    @apply dark:bg-slate-800 dark:border-slate-700;
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    background-color: var(--variant-soft-bg);
+    color: var(--variant-soft-fg);
+    border: 1px solid transparent;
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .badge.variant-outline {
+    background-color: transparent;
+    color: var(--variant-fg);
+    border-color: var(--variant-border);
+  }
+
+  body:has([data-template-id="glitter-academy_core"]) .badge.variant-ghost {
+    background-color: transparent;
+    color: var(--variant-fg);
+  }
+}

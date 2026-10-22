@@ -1,0 +1,45 @@
+<partial>
+  <div class="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+    <div class="flex items-center justify-between gap-3 mb-3">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+        <icon name="chart-line" size="sm" class="text-teal-500"/>
+        <span>$t:home.live_activity.title</span>
+      </h2>
+      <span class="text-xs font-medium text-teal-600 dark:text-teal-400">$t:home.live_activity.status</span>
+    </div>
+    <ul data-if="{{(recent_posts?.data ?? []).length > 0}}" data-each="activity in {{(recent_posts?.data ?? []).slice(0, 4)}}" class="divide-y divide-slate-200 dark:divide-slate-700 border-y border-slate-200 dark:border-slate-700">
+      <li class="py-3">
+        <button type="button" class="w-full text-left flex items-start gap-3 cursor-pointer">
+          <on type="click">
+            <navigate path="/board/{{activity?.board_slug ?? ''}}/{{activity?.id ?? ''}}"/>
+          </on>
+          <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-50 text-teal-600 dark:bg-teal-950/40 dark:text-teal-300">
+            <icon data-if="{{(activity?.comment_count ?? 0) === 0}}" name="message-square" size="sm"/>
+            <icon data-if="{{(activity?.comment_count ?? 0) > 0}}" name="comments" size="sm"/>
+          </span>
+          <div class="min-w-0 flex-1">
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+              <span class="font-semibold text-slate-900 dark:text-white">{{activity?.author?.name ?? activity?.author_name ?? ''}}</span>
+              <span data-if="{{(activity?.comment_count ?? 0) === 0}}" class="text-slate-600 dark:text-slate-400">$t:home.live_activity.new_post</span>
+              <span data-if="{{(activity?.comment_count ?? 0) > 0}}" class="text-slate-600 dark:text-slate-400">$t:home.live_activity.new_comment</span>
+              <span data-if="{{(activity?.board_slug ?? '') === 'notice'}}" class="text-slate-500 dark:text-slate-400">$t:boards.notice</span>
+              <span data-if="{{(activity?.board_slug ?? '') === 'free'}}" class="text-slate-500 dark:text-slate-400">$t:boards.free</span>
+              <span data-if="{{(activity?.board_slug ?? '') === 'qna'}}" class="text-slate-500 dark:text-slate-400">$t:boards.qna</span>
+              <span data-if="{{(activity?.board_slug ?? '') === 'resources'}}" class="text-slate-500 dark:text-slate-400">$t:boards.resources</span>
+              <span data-if="{{(activity?.board_slug ?? '') === 'introductions'}}" class="text-slate-500 dark:text-slate-400">$t:boards.introductions</span>
+              <span data-if="{{(activity?.board_slug ?? '') === 'support'}}" class="text-slate-500 dark:text-slate-400">$t:boards.support</span>
+              <span data-if="{{!['notice','free','qna','resources','introductions','support'].includes(activity?.board_slug ?? '')}}" class="text-slate-500 dark:text-slate-400">{{activity?.board_name ?? ''}}</span>
+            </div>
+            <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+              <span>{{activity?.created_at_formatted ?? ''}}</span>
+            </div>
+          </div>
+        </button>
+      </li>
+    </ul>
+    <div data-if="{{(recent_posts?.data ?? []).length === 0}}" class="border-y border-dashed border-slate-200 py-5 text-center dark:border-slate-700">
+      <p class="text-sm font-medium text-slate-900 dark:text-white">$t:home.live_activity.empty_title</p>
+      <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">$t:home.live_activity.empty_description</p>
+    </div>
+  </div>
+</partial>

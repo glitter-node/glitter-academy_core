@@ -1,0 +1,59 @@
+<partial>
+  <div class="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-md border border-slate-200 dark:border-slate-700">
+    <div class="flex flex-col gap-2 mb-3">
+      <responsive on="desktop" class="flex flex-row items-center justify-between gap-4 mb-3"/>
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+        <icon name="map" size="lg" class="text-sky-500"/>
+        <span>$t:home.board_discovery.title</span>
+      </h2>
+      <button type="button" variant="outline" size="sm" class="gap-2 cursor-pointer self-start">
+        <on type="click">
+          <navigate path="/boards"/>
+        </on>
+        <span>$t:home.board_discovery.view_all</span>
+        <icon name="arrow-right" size="sm"/>
+      </button>
+    </div>
+    <p class="mb-4 text-sm text-slate-600 dark:text-slate-400">$t:home.board_discovery.description</p>
+    <ul data-if="{{(popular_boards?.data ?? []).length > 0}}" data-each="board, index in {{(popular_boards?.data ?? []).slice(0, 4)}}" class="divide-y divide-slate-200 dark:divide-slate-700">
+      <li class="py-3 first:pt-0 last:pb-0">
+        <button type="button" class="w-full flex items-center justify-between gap-3 text-left rounded-lg px-2 py-2 hover:bg-slate-50 dark:hover:bg-slate-900/50 cursor-pointer transition-colors">
+          <on type="click">
+            <navigate path="/board/{{board?.slug ?? ''}}"/>
+          </on>
+          <div class="flex items-start gap-3 min-w-0">
+            <span class="mt-0.5 w-7 h-7 rounded-full bg-sky-50 text-sky-700 dark:bg-sky-900/40 dark:text-sky-200 flex items-center justify-center text-xs font-semibold shrink-0">{{index + 1}}</span>
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 min-w-0">
+                <span data-if="{{(board?.slug ?? '') === 'notice'}}" class="text-sm font-semibold text-slate-900 dark:text-white truncate">$t:boards.notice</span>
+                <span data-if="{{(board?.slug ?? '') === 'free'}}" class="text-sm font-semibold text-slate-900 dark:text-white truncate">$t:boards.free</span>
+                <span data-if="{{(board?.slug ?? '') === 'qna'}}" class="text-sm font-semibold text-slate-900 dark:text-white truncate">$t:boards.qna</span>
+                <span data-if="{{(board?.slug ?? '') === 'resources'}}" class="text-sm font-semibold text-slate-900 dark:text-white truncate">$t:boards.resources</span>
+                <span data-if="{{(board?.slug ?? '') === 'introductions'}}" class="text-sm font-semibold text-slate-900 dark:text-white truncate">$t:boards.introductions</span>
+                <span data-if="{{(board?.slug ?? '') === 'support'}}" class="text-sm font-semibold text-slate-900 dark:text-white truncate">$t:boards.support</span>
+                <span data-if="{{!['notice','free','qna','resources','introductions','support'].includes(board?.slug ?? '')}}" class="text-sm font-semibold text-slate-900 dark:text-white truncate">{{board?.name ?? ''}}</span>
+              </div>
+              <p data-if="{{(board?.slug ?? '') === 'notice'}}" class="mt-1 text-xs text-slate-500 dark:text-slate-400">$t:home.board_discovery.purpose_notice</p>
+              <p data-if="{{(board?.slug ?? '') === 'free'}}" class="mt-1 text-xs text-slate-500 dark:text-slate-400">$t:home.board_discovery.purpose_free</p>
+              <p data-if="{{(board?.slug ?? '') === 'qna'}}" class="mt-1 text-xs text-slate-500 dark:text-slate-400">$t:home.board_discovery.purpose_qna</p>
+              <p data-if="{{(board?.slug ?? '') === 'resources'}}" class="mt-1 text-xs text-slate-500 dark:text-slate-400">$t:home.board_discovery.purpose_resources</p>
+              <p data-if="{{(board?.slug ?? '') === 'introductions'}}" class="mt-1 text-xs text-slate-500 dark:text-slate-400">$t:home.board_discovery.purpose_introductions</p>
+              <p data-if="{{(board?.slug ?? '') === 'support'}}" class="mt-1 text-xs text-slate-500 dark:text-slate-400">$t:home.board_discovery.purpose_support</p>
+              <p data-if="{{!['notice','free','qna','resources','introductions','support'].includes(board?.slug ?? '')}}" class="mt-1 text-xs text-slate-500 dark:text-slate-400">$t:home.board_discovery.purpose_general</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="text-xs font-semibold text-slate-700 dark:text-slate-200">{{board?.posts_count ?? board?.post_count ?? board?.activity_count ?? 0 | number}}</span>
+            <span class="text-xs text-slate-500 dark:text-slate-400">$t:home.board_discovery.posts_label</span>
+            <icon name="chevron-right" size="sm" class="text-slate-400"/>
+          </div>
+        </button>
+      </li>
+    </ul>
+    <div data-if="{{(popular_boards?.data ?? []).length === 0}}" class="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-7 text-center dark:border-slate-700 dark:bg-slate-900/40">
+      <icon name="map" size="lg" class="mx-auto mb-3 text-sky-500"/>
+      <h3 class="text-sm font-semibold text-slate-900 dark:text-white">$t:home.board_discovery.empty_title</h3>
+      <p class="mx-auto mt-1 max-w-md text-sm text-slate-500 dark:text-slate-400">$t:home.board_discovery.empty_description</p>
+    </div>
+  </div>
+</partial>

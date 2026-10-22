@@ -1,0 +1,103 @@
+<partial>
+  <div>
+    <div class="flex flex-col sm:flex-row gap-3 mb-4">
+      <select value="{{_global.myPostsBoard ?? ''}}" class="min-w-[120px] px-3 py-2 text-sm border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
+        <on type="change">
+          <set-state target="global" myPostsBoard="{{$event.target.value}}" :myPostsPage="1"/>
+          <refetch-data-source dataSourceId="myPosts"/>
+        </on>
+        <option value="">$t:mypage.board_activities.filter.all_boards</option>
+        <option data-each="board in {{boards?.data ?? []}}" value="{{board.slug}}">{{board.name}}</option>
+      </select>
+      <select value="{{_global.myPostsSort ?? 'latest'}}" class="min-w-[100px] px-3 py-2 text-sm border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
+        <on type="change">
+          <set-state target="global" myPostsSort="{{$event.target.value}}" :myPostsPage="1"/>
+          <refetch-data-source dataSourceId="myPosts"/>
+        </on>
+        <option value="latest">$t:mypage.board_activities.sort.latest</option>
+        <option value="oldest">$t:mypage.board_activities.sort.oldest</option>
+        <option value="views">$t:mypage.board_activities.sort.views</option>
+      </select>
+      <div class="flex-1 flex gap-2">
+        <input type="text" placeholder="$t:mypage.board_activities.search_placeholder" value="{{_global.myPostsSearch ?? ''}}" class="flex-1 px-3 py-2 text-sm border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500">
+          <on type="change">
+            <set-state target="global" myPostsSearch="{{$event.target.value}}"/>
+          </on>
+        </input>
+        <button class="px-4 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-lg text-sm font-medium hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors">
+          <on type="click">
+            <set-state target="global" :myPostsPage="1"/>
+            <refetch-data-source dataSourceId="myPosts"/>
+          </on>
+          $t:common.search
+        </button>
+        <button class="px-4 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+          <on type="click">
+            <set-state target="global" myPostsBoard="" myPostsSearch="" myPostsSort="latest" :myPostsPage="1"/>
+            <refetch-data-source dataSourceId="myPosts"/>
+          </on>
+          $t:common.reset
+        </button>
+      </div>
+    </div>
+    <div data-if="{{myPosts?.data?.query?.search || myPosts?.data?.query?.board_slug}}" class="mb-4 p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg flex items-center justify-between">
+      <div class="flex items-center gap-2 text-sm text-teal-700 dark:text-teal-300">
+        <icon name="search" size="sm"/>
+        <span>$t:mypage.board_activities.search_result</span>
+        <span data-if="{{myPosts?.data?.query?.search}}" class="font-medium">"{{myPosts?.data?.query?.search}}"</span>
+        <span>$t:mypage.board_activities.search_result_count|count={{myPosts?.data?.total ?? 0}}</span>
+      </div>
+      <button class="text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-200 text-sm">
+        <on type="click">
+          <set-state target="global" myPostsBoard="" myPostsSearch="" myPostsSort="latest" :myPostsPage="1"/>
+          <refetch-data-source dataSourceId="myPosts"/>
+        </on>
+        $t:common.reset
+      </button>
+    </div>
+    <div class="space-y-3">
+      <div data-if="{{myPosts?.data?.data &amp;&amp; myPosts.data.data.length > 0}}" data-each="post in {{myPosts?.data?.data ?? []}}">
+        <button class="w-full text-left block bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-slate-300 dark:hover:border-slate-600 transition-colors cursor-pointer">
+          <on type="click">
+            <navigate path="/board/{{post.board_slug}}/{{post.id}}"/>
+          </on>
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex-1 min-w-0 flex items-center gap-2">
+              <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded flex-shrink-0">{{post.board_name}}</span>
+              <span class="text-base font-medium text-slate-900 dark:text-white truncate">{{post.title}}</span>
+              <icon data-if="{{post.is_secret}}" name="lock" size="xs" class="text-slate-400 dark:text-slate-500 flex-shrink-0"/>
+            </div>
+            <span class="text-xs text-slate-500 dark:text-slate-400 flex-shrink-0 whitespace-nowrap" title="{{post.created_at ?? ''}}">{{post.created_at_formatted ?? ''}}</span>
+          </div>
+          <p data-if="{{post.content_plain}}" class="mt-2 text-sm text-slate-600 dark:text-slate-300 line-clamp-2">{{post.content_plain}}</p>
+          <div class="flex items-center gap-4 mt-2 text-xs text-slate-500 dark:text-slate-400">
+            <span class="flex items-center gap-1">
+              <span>$t:mypage.board_activities.meta.views</span>
+              <span>{{post.view_count ?? 0}}</span>
+            </span>
+            <span class="flex items-center gap-1">
+              <span>$t:mypage.board_activities.meta.comments</span>
+              <span>$t:mypage.board_activities.meta.comments_count|count={{post.comments_count ?? 0}}</span>
+            </span>
+          </div>
+        </button>
+      </div>
+      <div data-if="{{!myPosts?.data?.data || myPosts.data.data.length === 0}}" class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-8 text-center">
+        <icon name="file-text" size="3x" class="mx-auto text-slate-300 dark:text-slate-600 mb-3"/>
+        <p class="text-slate-500 dark:text-slate-400">$t:mypage.board_activities.empty_posts</p>
+        <button class="inline-block mt-4 px-4 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-lg text-sm font-medium cursor-pointer hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors">
+          <on type="click">
+            <navigate path="/boards"/>
+          </on>
+          $t:mypage.board_activities.go_boards
+        </button>
+      </div>
+    </div>
+    <pagination data-type="composite" data-if="{{myPosts?.data?.last_page > 1}}" currentPage="{{myPosts?.data?.current_page ?? 1}}" totalPages="{{myPosts?.data?.last_page ?? 1}}" class="mt-4 flex justify-center">
+      <on event="onPageChange">
+        <set-state target="global" myPostsPage="{{$args[0]}}"/>
+        <refetch-data-source dataSourceId="myPosts"/>
+      </on>
+    </pagination>
+  </div>
+</partial>

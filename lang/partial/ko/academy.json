@@ -1,0 +1,214 @@
+{
+  "home": {
+    "title": "상담 예약 플랫폼",
+    "body": "상담 랜딩, 예약 가능한 프로그램, 가능 시간 안내, 회원 계정, 예약 내역이 필요한 교육센터와 학원을 위한 GnuBoard7 사용자 템플릿입니다.",
+    "programs_button": "예약 프로그램 보기",
+    "consultation_button": "상담 시작"
+  },
+  "sections": {
+    "identity": {
+      "title": "템플릿 소개",
+      "body": "Academy Core Template은 현재 활성 glitter-academy_core 템플릿 정체성을 유지하면서 교육 및 상담 서비스 운영에 맞게 확장한 사용자 템플릿입니다."
+    },
+    "auth": {
+      "title": "인증 흐름 지원",
+      "body": "로그인, 회원가입, 비밀번호 찾기, 이메일 링크 기반 재설정, 내 정보, 비밀번호 변경 페이지를 템플릿 레벨에서 제공합니다."
+    },
+    "form": {
+      "title": "안정적인 폼 구조",
+      "body": "주요 인증 폼은 dataKey form 단일 상태를 사용해 화면 입력값과 제출 payload가 일치하도록 구성했습니다."
+    },
+    "cms_ready": {
+      "title": "CMS 및 API 연동 준비",
+      "body": "공지 상담 분야, 페이지 콘텐츠, 프로그램 데이터, 모듈 기반 운영 API로 확장할 수 있는 구조를 제공합니다."
+    },
+    "extensible": {
+      "title": "확장 가능한 구조",
+      "body": "강사, 프로그램, 시간표, 공지, FAQ, 문의, 상담 페이지를 분리해 운영자가 정적 콘텐츠를 CMS 또는 모듈 데이터로 교체하기 쉽습니다."
+    },
+    "modules": {
+      "title": "필수 및 선택 모듈",
+      "body": "Board와 Page 모듈을 기본 전제로 하며 Glitter Reservation과 상담 모듈은 선택 사항입니다. 없을 때도 페이지 전체가 실패하지 않습니다."
+    },
+    "beta": {
+      "title": "현재 베타 상태",
+      "body": "이 템플릿은 교육 사이트 예시 베타입니다. 운영 전 콘텐츠, 권한, 알림, 메일 발송, 예약 정책을 반드시 점검해야 합니다."
+    }
+  },
+  "programs": {
+    "course": {
+      "title": "교육기관 홈페이지",
+      "body": "핵심 과정, 입학 흐름, 운영 정책을 템플릿 관리 콘텐츠로 소개할 수 있습니다."
+    },
+    "operation": {
+      "title": "프로그램 운영 사이트",
+      "body": "프로그램, 시간표, 공지, FAQ 페이지를 반복 운영형 교육 사이트의 기본 구조로 사용할 수 있습니다."
+    },
+    "mvp": {
+      "title": "인증 기반 MVP",
+      "body": "회원 계정과 마이페이지 흐름을 기반으로 베타 서비스의 회원 전용 기능을 시작할 수 있습니다."
+    }
+  },
+  "reservation": {
+    "identity": {
+      "title": "예약 플랫폼 정체성",
+      "body": "Academy Core는 기존 GnuBoard7 템플릿 구조를 유지하면서 glitter-academy_core를 상담 예약 여정 중심으로 전환합니다."
+    },
+    "landing": {
+      "step_label": "예약 시작",
+      "title": "이메일 인증 후 가능한 상담 시간을 선택합니다.",
+      "body": "Glitter Reservation 모듈이 설치되어 있으면 서비스, 가능 시간, 이메일 인증, 예약 생성, 조회, 취소 API와 연결됩니다."
+    },
+    "login_required": {
+      "title": "회원 접근 지원",
+      "body": "방문자는 공개 예약 흐름을 시작할 수 있고, 로그인한 회원은 마이페이지에서 예약 내역을 확인할 수 있습니다."
+    },
+    "module": {
+      "unavailable_title": "예약 모듈을 사용할 수 없습니다",
+      "unavailable_body": "실시간 예약 기능은 Glitter Reservation 모듈이 필요합니다. 모듈 라우트와 공개 서비스가 준비되기 전까지 이 페이지는 안내 상태로 유지됩니다."
+    },
+    "services": {
+      "title": "예약 가능한 상담 프로그램",
+      "body": "예약 모듈에 공개된 서비스가 학원 상담 상품으로 표시됩니다.",
+      "empty": "공개된 예약 서비스가 아직 없습니다.",
+      "duration": "소요 시간",
+      "duration_value": "소요 시간: {minutes}분",
+      "slot_interval": "슬롯 간격",
+      "slot_interval_value": "슬롯 간격: {minutes}분",
+      "booking_window": "예약 가능 기간",
+      "booking_window_value": "예약 가능 기간: {min}-{max}일",
+      "minutes": "분",
+      "days": "일",
+      "select": "서비스 선택"
+    },
+    "availability": {
+      "title": "가능 시간 및 일정 안내",
+      "body": "상담 페이지에서 서비스와 날짜를 선택하면 실시간 가능 시간이 로드됩니다. 운영자는 예약 모듈에서 일정, 휴무일, 휴게 시간, 슬롯 규칙을 관리합니다.",
+      "published_services": "공개 서비스",
+      "live_slots": "실시간 시간 조회",
+      "email_verification": "이메일 인증 필요",
+      "mypage_history": "회원 예약 내역"
+    },
+    "form": {
+      "verification_title": "이메일 인증",
+      "verification_body": "예약 모듈은 예약 제출 전에 인증된 이메일을 요구합니다.",
+      "booking_title": "예약 정보",
+      "booking_body": "서비스, 날짜, 시간, 연락처 정보를 선택한 뒤 제출합니다.",
+      "email": "이메일 주소",
+      "email_placeholder": "name@example.com",
+      "send_verification": "인증 링크 발송",
+      "sending_verification": "발송 중...",
+      "refresh_status": "인증 상태 새로고침",
+      "verified_email": "인증된 이메일",
+      "verified_notice": "이메일 인증이 완료되었습니다. 예약 정보를 계속 입력하세요.",
+      "verification_sent": "인증 링크를 이메일로 전송했습니다.",
+      "verification_failed": "인증 메일을 발송하지 못했습니다.",
+      "verification_refresh_failed": "인증 상태를 새로고침하지 못했습니다.",
+      "service": "상담 서비스",
+      "service_placeholder": "서비스를 선택하세요",
+      "date": "예약 날짜",
+      "check_slots": "가능 시간 확인",
+      "checking_slots": "확인 중...",
+      "slots": "가능 시간",
+      "no_slots": "선택한 날짜에 열린 상담 시간이 없습니다.",
+      "slot_failed": "가능 시간을 불러오지 못했습니다.",
+      "name": "학생 또는 보호자 이름",
+      "name_placeholder": "예약자 이름을 입력하세요",
+      "phone": "연락처",
+      "phone_placeholder": "01012345678",
+      "email_readonly": "인증된 이메일이 예약과 함께 제출됩니다.",
+      "memo": "상담 메모",
+      "memo_placeholder": "학습 고민, 목표 과목, 일정 메모를 입력하세요.",
+      "submit": "상담 예약 제출",
+      "submitting": "제출 중...",
+      "success": "상담 예약이 접수되었습니다.",
+      "failed": "상담 예약을 제출하지 못했습니다.",
+      "reference": "예약 번호",
+      "reference_value": "예약 번호: {id}",
+      "status": "상태"
+    },
+    "status": {
+      "pending": "대기",
+      "confirmed": "확정",
+      "cancelled": "취소",
+      "completed": "완료",
+      "no_show": "노쇼"
+    },
+    "operation": {
+      "title": "운영 점검 항목",
+      "body": "운영 전 공개 서비스 등록, 일정과 휴무일 설정, 메일 발송 확인, 취소 정책 검토, 담당자 알림 경로를 확인해야 합니다.",
+      "scope_title": "포함 및 제외 범위",
+      "scope_body": "템플릿은 예약 사용자 페이지와 모듈 API 연결을 포함합니다. CRM, 결제, 출결, LMS, 직원 워크플로우 커스터마이징은 템플릿 범위 밖입니다.",
+      "beta_title": "베타 운영 안내",
+      "beta_body": "이 템플릿은 베타 예약 플랫폼 템플릿입니다. 운영 전 모듈 데이터, 검증 메시지, 이메일 인증, 취소 정책을 확인하세요."
+    }
+  },
+  "faq": {
+    "scope": {
+      "question": "무엇이 포함되어 있나요?",
+      "answer": "공개 페이지, 인증 페이지, 마이페이지 내 정보와 비밀번호 변경, 상담 fallback 페이지가 포함되어 있습니다."
+    },
+    "modules": {
+      "question": "무엇이 제외되어 있나요?",
+      "answer": "완전한 학원 ERP, 결제, 출결, LMS, 맞춤 상담 워크플로우 로직은 템플릿 범위에 포함하지 않습니다."
+    }
+  },
+  "consultation": {
+    "unavailable_title": "예약 모듈이 필요합니다",
+    "unavailable_body": "상담 예약은 Glitter Reservation과 연결할 수 있도록 준비되어 있습니다. 모듈을 활성화하고 공개 서비스를 등록하면 예약 옵션이 표시됩니다.",
+    "service_title_fallback": "상담 서비스",
+    "service_body_fallback": "상담 예약에 사용할 수 있는 서비스입니다."
+  },
+  "pages": {
+    "about": {
+      "meta_title": "Academy Core 소개",
+      "meta_description": "Academy Core Template 소개",
+      "title": "Academy Core 소개",
+      "subtitle": "학원, 교육기관, 프로그램 사이트, 상담 기반 서비스를 위한 GnuBoard7 사용자 템플릿입니다."
+    },
+    "programs": {
+      "meta_title": "프로그램",
+      "meta_description": "프로그램 운영 개요",
+      "title": "프로그램",
+      "subtitle": "과정, 트랙, 기수, 베타 서비스 제안을 CMS 또는 API 연동이 가능한 구조로 정리합니다."
+    },
+    "instructors": {
+      "meta_title": "강사진",
+      "meta_description": "강사진 소개 페이지",
+      "title": "강사진",
+      "subtitle": "강사 프로필 디렉터리로 사용하거나 모듈 기반 교직원 API와 연결할 수 있습니다."
+    },
+    "timetable": {
+      "meta_title": "시간표",
+      "meta_description": "시간표 및 운영 일정",
+      "title": "시간표",
+      "subtitle": "수업 일정, 상담 가능 시간, 운영 기간, 모집 일정을 게시할 수 있습니다."
+    },
+    "notices": {
+      "meta_title": "공지사항",
+      "meta_description": "학원 공지사항",
+      "title": "공지사항",
+      "subtitle": "Board 모듈과 연결해 공지, 입학 안내, 운영 안내를 제공할 수 있습니다.",
+      "board_button": "공지 상담 분야 열기"
+    },
+    "faq": {
+      "meta_title": "FAQ",
+      "meta_description": "자주 묻는 질문",
+      "title": "FAQ",
+      "subtitle": "템플릿 포함 범위, 선택 모듈, 운영 점검 항목을 안내합니다."
+    },
+    "contact": {
+      "meta_title": "문의",
+      "meta_description": "문의 및 연락처 페이지",
+      "title": "문의",
+      "subtitle": "기관 연락처를 안내하거나 방문자를 상담 예약 흐름으로 연결합니다.",
+      "consultation_button": "상담 신청하기"
+    },
+    "consultation": {
+      "meta_title": "상담",
+      "meta_description": "상담 예약",
+      "title": "상담",
+      "subtitle": "운영 흐름이 준비되면 예약 서비스 또는 맞춤 상담 모듈을 연결하세요."
+    }
+  }
+}

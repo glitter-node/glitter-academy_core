@@ -1,0 +1,23 @@
+<partial>
+  <div data-if="{{_global?.searchActiveTab === 'posts' &amp;&amp; query?.q}}" class="flex flex-wrap gap-2 mb-4">
+    <select data-if="{{_global?.searchActiveTab === 'posts'}}" name="boardFilter" class="w-40 px-4 py-2.5 bg-slate-100 dark:bg-slate-700 border-0 rounded-xl text-slate-700 dark:text-slate-200 font-medium focus:ring-2 focus:ring-teal-500 focus:outline-none cursor-pointer" value="{{_global?.searchBoardFilter ?? ''}}">
+      <on type="change">
+        <set-state target="global" searchBoardFilter="{{$event.target.value}}" :searchPage="1"/>
+        <refetch-data-source dataSourceId="searchResults"/>
+      </on>
+      <option value="">$t:search.filter.all_boards</option>
+      <option data-each="board in {{searchResults?.data?.posts?.available_boards ?? []}}" value="{{board?.slug}}">{{board?.name}}</option>
+    </select>
+    <select data-type="composite" data-if="{{_global?.searchActiveTab === 'posts'}}" name="sortBy" class="w-32" value="{{_global?.searchSortBy ?? 'relevance'}}">
+      <options>
+        <option value="relevance">$t:search.sort.relevance</option>
+        <option value="latest">$t:search.sort.latest</option>
+        <option value="popular">$t:search.sort.popular</option>
+      </options>
+      <on type="change">
+        <set-state target="global" searchSortBy="{{$event.target.value}}" :searchPage="1"/>
+        <refetch-data-source dataSourceId="searchResults"/>
+      </on>
+    </select>
+  </div>
+</partial>

@@ -1,0 +1,950 @@
+{
+  "version": "1.0.0",
+  "layout_name": "academy/consultation",
+  "extends": "_user_base",
+  "meta": {
+    "title": "$t:academy.pages.consultation.meta_title",
+    "description": "$t:academy.pages.consultation.meta_description"
+  },
+  "initLocal": {
+    "form": {
+      "email": "",
+      "customer_email": "",
+      "service_id": "",
+      "booking_date": "",
+      "booking_time": "",
+      "customer_name": "",
+      "customer_phone": "",
+      "memo": ""
+    },
+    "verificationStatus": {
+      "verified": false,
+      "email": null,
+      "expires_at": null
+    },
+    "verificationSent": false,
+    "verificationFailed": false,
+    "verificationRefreshFailed": false,
+    "isSendingVerification": false,
+    "isRefreshingVerification": false,
+    "isLoadingSlots": false,
+    "hasSearchedSlots": false,
+    "slots": [],
+    "slotFailed": false,
+    "isSubmitting": false,
+    "success": false,
+    "reservationResult": null,
+    "errors": null,
+    "bookingFailed": false
+  },
+  "data_sources": [
+    {
+      "id": "reservation_services",
+      "type": "api",
+      "endpoint": "/modules/glitter-reservation/reservation/services",
+      "method": "GET",
+      "auto_fetch": true,
+      "auth_mode": "none",
+      "loading_strategy": "progressive",
+      "fallback": {
+        "data": []
+      },
+      "errorHandling": {
+        "404": {
+          "handler": "suppress"
+        },
+        "default": {
+          "handler": "suppress"
+        }
+      }
+    }
+  ],
+  "init_actions": [
+    {
+      "handler": "apiCall",
+      "target": "/sanctum/csrf-cookie",
+      "params": {
+        "method": "GET"
+      }
+    },
+    {
+      "handler": "apiCall",
+      "target": "/modules/glitter-reservation/reservation/verification-status",
+      "params": {
+        "method": "GET"
+      },
+      "onSuccess": [
+        {
+          "handler": "setState",
+          "params": {
+            "target": "local",
+            "verificationStatus": "{{response.data ?? { verified: false, email: null, expires_at: null }}}",
+            "form": {
+              "email": "{{response.data?.email ?? _local.form.email ?? ''}}",
+              "customer_email": "{{response.data?.email ?? _local.form.customer_email ?? ''}}"
+            }
+          }
+        }
+      ],
+      "onError": [
+        {
+          "handler": "suppress"
+        }
+      ]
+    }
+  ],
+  "slots": {
+    "content": [
+      {
+        "type": "layout",
+        "name": "Container",
+        "props": {
+          "className": "py-10 px-4"
+        },
+        "children": [
+          {
+            "type": "basic",
+            "name": "Div",
+            "props": {
+              "className": "max-w-5xl mx-auto space-y-8"
+            },
+            "children": [
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "space-y-4"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Span",
+                    "props": {
+                      "className": "inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 text-sm font-medium text-emerald-700 dark:text-emerald-200"
+                    },
+                    "text": "$t:academy.reservation.landing.step_label"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "H1",
+                    "props": {
+                      "className": "text-3xl font-bold text-slate-900 dark:text-white"
+                    },
+                    "text": "$t:academy.pages.consultation.title"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "text-lg text-slate-600 dark:text-slate-300 max-w-3xl"
+                    },
+                    "text": "$t:academy.reservation.landing.body"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "if": "{{!(reservation_services?.data?.length > 0)}}",
+                "props": {
+                  "className": "p-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "H2",
+                    "props": {
+                      "className": "text-xl font-semibold text-amber-900 dark:text-amber-100 mb-2"
+                    },
+                    "text": "$t:academy.reservation.module.unavailable_title"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "text-amber-800 dark:text-amber-200"
+                    },
+                    "text": "$t:academy.reservation.module.unavailable_body"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "if": "{{reservation_services?.data?.length > 0}}",
+                "props": {
+                  "className": "grid grid-cols-1 lg:grid-cols-3 gap-6"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "props": {
+                      "className": "lg:col-span-1 space-y-4"
+                    },
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "Div",
+                        "props": {
+                          "className": "p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                        },
+                        "children": [
+                          {
+                            "type": "basic",
+                            "name": "H2",
+                            "props": {
+                              "className": "text-lg font-semibold text-slate-900 dark:text-white mb-2"
+                            },
+                            "text": "$t:academy.reservation.login_required.title"
+                          },
+                          {
+                            "type": "basic",
+                            "name": "P",
+                            "props": {
+                              "className": "text-sm text-slate-600 dark:text-slate-300"
+                            },
+                            "text": "$t:academy.reservation.login_required.body"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Div",
+                        "props": {
+                          "className": "p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                        },
+                        "children": [
+                          {
+                            "type": "basic",
+                            "name": "H2",
+                            "props": {
+                              "className": "text-lg font-semibold text-slate-900 dark:text-white mb-3"
+                            },
+                            "text": "$t:academy.reservation.services.title"
+                          },
+                          {
+                            "type": "basic",
+                            "name": "Div",
+                            "iteration": {
+                              "source": "{{reservation_services?.data ?? []}}",
+                              "item_var": "service"
+                            },
+                            "props": {
+                              "className": "py-3 border-t border-slate-100 dark:border-slate-700 first:border-t-0"
+                            },
+                            "children": [
+                              {
+                                "type": "basic",
+                                "name": "P",
+                                "props": {
+                                  "className": "font-medium text-slate-900 dark:text-white"
+                                },
+                                "text": "{{service?.localized_name ?? service?.name ?? ''}}"
+                              },
+                              {
+                                "type": "basic",
+                                "name": "P",
+                                "props": {
+                                  "className": "text-sm text-slate-600 dark:text-slate-300 mt-1"
+                                },
+                                "text": "$t:academy.reservation.services.duration_value|minutes={{service?.duration_minutes ?? '-'}}"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "props": {
+                      "className": "lg:col-span-2 space-y-6"
+                    },
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "Div",
+                        "if": "{{_local.verificationSent}}",
+                        "props": {
+                          "className": "p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg text-emerald-800 dark:text-emerald-200"
+                        },
+                        "text": "$t:academy.reservation.form.verification_sent"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Div",
+                        "if": "{{_local.verificationFailed}}",
+                        "props": {
+                          "className": "p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200"
+                        },
+                        "text": "$t:academy.reservation.form.verification_failed"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Div",
+                        "if": "{{_local.verificationRefreshFailed}}",
+                        "props": {
+                          "className": "p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200"
+                        },
+                        "text": "$t:academy.reservation.form.verification_refresh_failed"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Div",
+                        "if": "{{_local.slotFailed}}",
+                        "props": {
+                          "className": "p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200"
+                        },
+                        "text": "$t:academy.reservation.form.slot_failed"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Div",
+                        "if": "{{_local.bookingFailed}}",
+                        "props": {
+                          "className": "p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200"
+                        },
+                        "text": "$t:academy.reservation.form.failed"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Div",
+                        "if": "{{_local.success}}",
+                        "props": {
+                          "className": "p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg text-emerald-800 dark:text-emerald-200"
+                        },
+                        "children": [
+                          {
+                            "type": "basic",
+                            "name": "P",
+                            "props": {
+                              "className": "font-medium"
+                            },
+                            "text": "$t:academy.reservation.form.success"
+                          },
+                          {
+                            "type": "basic",
+                            "name": "P",
+                            "props": {
+                              "className": "text-sm mt-1"
+                            },
+                            "text": "$t:academy.reservation.form.reference_value|id={{_local.reservationResult?.id ?? '-'}}"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Div",
+                        "props": {
+                          "className": "p-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                        },
+                        "children": [
+                          {
+                            "type": "basic",
+                            "name": "H2",
+                            "props": {
+                              "className": "text-xl font-semibold text-slate-900 dark:text-white mb-2"
+                            },
+                            "text": "$t:academy.reservation.form.verification_title"
+                          },
+                          {
+                            "type": "basic",
+                            "name": "P",
+                            "props": {
+                              "className": "text-sm text-slate-600 dark:text-slate-300 mb-5"
+                            },
+                            "text": "$t:academy.reservation.form.verification_body"
+                          },
+                          {
+                            "type": "basic",
+                            "name": "Form",
+                            "dataKey": "form",
+                            "props": {
+                              "className": "grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-3 items-end"
+                            },
+                            "actions": [
+                              {
+                                "type": "submit",
+                                "handler": "sequence",
+                                "actions": [
+                                  {
+                                    "handler": "setState",
+                                    "params": {
+                                      "target": "local",
+                                      "isSendingVerification": true,
+                                      "verificationSent": false,
+                                      "verificationFailed": false,
+                                      "errors": null
+                                    }
+                                  },
+                                  {
+                                    "handler": "apiCall",
+                                    "target": "/modules/glitter-reservation/reservation/email-verifications",
+                                    "params": {
+                                      "method": "POST",
+                                      "body": "{{form}}"
+                                    },
+                                    "onSuccess": [
+                                      {
+                                        "handler": "setState",
+                                        "params": {
+                                          "target": "local",
+                                          "isSendingVerification": false,
+                                          "verificationSent": true,
+                                          "verificationFailed": false
+                                        }
+                                      }
+                                    ],
+                                    "onError": [
+                                      {
+                                        "handler": "setState",
+                                        "params": {
+                                          "target": "local",
+                                          "isSendingVerification": false,
+                                          "verificationFailed": true,
+                                          "errors": "{{error.errors}}"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ],
+                            "children": [
+                              {
+                                "type": "basic",
+                                "name": "Div",
+                                "children": [
+                                  {
+                                    "type": "basic",
+                                    "name": "Label",
+                                    "props": {
+                                      "className": "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                                    },
+                                    "text": "$t:academy.reservation.form.email"
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "Input",
+                                    "props": {
+                                      "type": "email",
+                                      "name": "email",
+                                      "placeholder": "$t:academy.reservation.form.email_placeholder",
+                                      "className": "w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white",
+                                      "required": true,
+                                      "disabled": "{{_local.isSendingVerification}}"
+                                    }
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "P",
+                                    "if": "{{_local.errors?.email}}",
+                                    "props": {
+                                      "className": "mt-1 text-sm text-red-600 dark:text-red-400"
+                                    },
+                                    "text": "{{_local.errors.email?.[0] ?? _local.errors.email ?? ''}}"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "basic",
+                                "name": "Button",
+                                "props": {
+                                  "type": "submit",
+                                  "className": "px-4 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium disabled:opacity-50",
+                                  "disabled": "{{_local.isSendingVerification}}"
+                                },
+                                "text": "{{_local.isSendingVerification ? '$t:academy.reservation.form.sending_verification' : '$t:academy.reservation.form.send_verification'}}"
+                              },
+                              {
+                                "type": "basic",
+                                "name": "Button",
+                                "props": {
+                                  "type": "button",
+                                  "className": "px-4 py-3 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium disabled:opacity-50",
+                                  "disabled": "{{_local.isRefreshingVerification}}"
+                                },
+                                "text": "$t:academy.reservation.form.refresh_status",
+                                "actions": [
+                                  {
+                                    "type": "click",
+                                    "handler": "sequence",
+                                    "actions": [
+                                      {
+                                        "handler": "setState",
+                                        "params": {
+                                          "target": "local",
+                                          "isRefreshingVerification": true,
+                                          "verificationRefreshFailed": false
+                                        }
+                                      },
+                                      {
+                                        "handler": "apiCall",
+                                        "target": "/modules/glitter-reservation/reservation/verification-status",
+                                        "params": {
+                                          "method": "GET"
+                                        },
+                                        "onSuccess": [
+                                          {
+                                            "handler": "setState",
+                                            "params": {
+                                              "target": "local",
+                                              "isRefreshingVerification": false,
+                                              "verificationStatus": "{{response.data ?? { verified: false, email: null, expires_at: null }}}",
+                                              "form": {
+                                                "email": "{{response.data?.email ?? _local.form.email ?? ''}}",
+                                                "customer_email": "{{response.data?.email ?? _local.form.customer_email ?? ''}}"
+                                              }
+                                            }
+                                          }
+                                        ],
+                                        "onError": [
+                                          {
+                                            "handler": "setState",
+                                            "params": {
+                                              "target": "local",
+                                              "isRefreshingVerification": false,
+                                              "verificationRefreshFailed": true
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "basic",
+                            "name": "P",
+                            "if": "{{_local.verificationStatus?.verified === true}}",
+                            "props": {
+                              "className": "mt-4 text-sm text-emerald-700 dark:text-emerald-300"
+                            },
+                            "text": "$t:academy.reservation.form.verified_notice"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Div",
+                        "props": {
+                          "className": "p-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                        },
+                        "children": [
+                          {
+                            "type": "basic",
+                            "name": "H2",
+                            "props": {
+                              "className": "text-xl font-semibold text-slate-900 dark:text-white mb-2"
+                            },
+                            "text": "$t:academy.reservation.form.booking_title"
+                          },
+                          {
+                            "type": "basic",
+                            "name": "P",
+                            "props": {
+                              "className": "text-sm text-slate-600 dark:text-slate-300 mb-5"
+                            },
+                            "text": "$t:academy.reservation.form.booking_body"
+                          },
+                          {
+                            "type": "basic",
+                            "name": "Form",
+                            "dataKey": "form",
+                            "props": {
+                              "className": "grid grid-cols-1 md:grid-cols-2 gap-4"
+                            },
+                            "actions": [
+                              {
+                                "type": "submit",
+                                "handler": "sequence",
+                                "actions": [
+                                  {
+                                    "handler": "setState",
+                                    "params": {
+                                      "target": "local",
+                                      "isSubmitting": true,
+                                      "bookingFailed": false,
+                                      "success": false,
+                                      "errors": null
+                                    }
+                                  },
+                                  {
+                                    "handler": "apiCall",
+                                    "target": "/modules/glitter-reservation/reservation/bookings",
+                                    "params": {
+                                      "method": "POST",
+                                      "body": "{{form}}"
+                                    },
+                                    "onSuccess": [
+                                      {
+                                        "handler": "setState",
+                                        "params": {
+                                          "target": "local",
+                                          "isSubmitting": false,
+                                          "success": true,
+                                          "bookingFailed": false,
+                                          "reservationResult": "{{response.data ?? null}}",
+                                          "errors": null,
+                                          "slots": [],
+                                          "hasSearchedSlots": false
+                                        }
+                                      }
+                                    ],
+                                    "onError": [
+                                      {
+                                        "handler": "setState",
+                                        "params": {
+                                          "target": "local",
+                                          "isSubmitting": false,
+                                          "bookingFailed": true,
+                                          "errors": "{{error.errors}}"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ],
+                            "children": [
+                              {
+                                "type": "basic",
+                                "name": "Div",
+                                "children": [
+                                  {
+                                    "type": "basic",
+                                    "name": "Label",
+                                    "props": {
+                                      "className": "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                                    },
+                                    "text": "$t:academy.reservation.form.service"
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "Select",
+                                    "props": {
+                                      "name": "service_id",
+                                      "placeholder": "$t:academy.reservation.form.service_placeholder",
+                                      "options": "{{(reservation_services?.data ?? []).map(service => ({ value: String(service.id), label: service.localized_name ?? service.name }))}}",
+                                      "className": "w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white",
+                                      "required": true,
+                                      "disabled": "{{_local.isSubmitting}}"
+                                    }
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "P",
+                                    "if": "{{_local.errors?.service_id}}",
+                                    "props": {
+                                      "className": "mt-1 text-sm text-red-600 dark:text-red-400"
+                                    },
+                                    "text": "{{_local.errors.service_id?.[0] ?? _local.errors.service_id ?? ''}}"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "basic",
+                                "name": "Div",
+                                "children": [
+                                  {
+                                    "type": "basic",
+                                    "name": "Label",
+                                    "props": {
+                                      "className": "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                                    },
+                                    "text": "$t:academy.reservation.form.date"
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "Input",
+                                    "props": {
+                                      "type": "date",
+                                      "name": "booking_date",
+                                      "className": "w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white",
+                                      "required": true,
+                                      "disabled": "{{_local.isSubmitting}}"
+                                    }
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "P",
+                                    "if": "{{_local.errors?.booking_date}}",
+                                    "props": {
+                                      "className": "mt-1 text-sm text-red-600 dark:text-red-400"
+                                    },
+                                    "text": "{{_local.errors.booking_date?.[0] ?? _local.errors.booking_date ?? ''}}"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "basic",
+                                "name": "Div",
+                                "props": {
+                                  "className": "md:col-span-2"
+                                },
+                                "children": [
+                                  {
+                                    "type": "basic",
+                                    "name": "Button",
+                                    "props": {
+                                      "type": "button",
+                                      "className": "px-4 py-3 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium disabled:opacity-50",
+                                      "disabled": "{{_local.isLoadingSlots || !_local.form.service_id || !_local.form.booking_date}}"
+                                    },
+                                    "text": "{{_local.isLoadingSlots ? '$t:academy.reservation.form.checking_slots' : '$t:academy.reservation.form.check_slots'}}",
+                                    "actions": [
+                                      {
+                                        "type": "click",
+                                        "handler": "sequence",
+                                        "actions": [
+                                          {
+                                            "handler": "setState",
+                                            "params": {
+                                              "target": "local",
+                                              "isLoadingSlots": true,
+                                              "slotFailed": false,
+                                              "hasSearchedSlots": false,
+                                              "slots": [],
+                                              "form": {
+                                                "booking_time": ""
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "handler": "apiCall",
+                                            "target": "/modules/glitter-reservation/reservation/slots?service_id={{_local.form.service_id ?? ''}}&booking_date={{_local.form.booking_date ?? ''}}",
+                                            "params": {
+                                              "method": "GET"
+                                            },
+                                            "onSuccess": [
+                                              {
+                                                "handler": "setState",
+                                                "params": {
+                                                  "target": "local",
+                                                  "isLoadingSlots": false,
+                                                  "hasSearchedSlots": true,
+                                                  "slots": "{{response.data?.slots ?? []}}"
+                                                }
+                                              }
+                                            ],
+                                            "onError": [
+                                              {
+                                                "handler": "setState",
+                                                "params": {
+                                                  "target": "local",
+                                                  "isLoadingSlots": false,
+                                                  "hasSearchedSlots": true,
+                                                  "slotFailed": true
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "basic",
+                                "name": "Div",
+                                "if": "{{_local.hasSearchedSlots && (_local.slots ?? []).length === 0 && !_local.slotFailed}}",
+                                "props": {
+                                  "className": "md:col-span-2 p-4 rounded-lg bg-slate-50 dark:bg-slate-900/40 text-slate-600 dark:text-slate-300"
+                                },
+                                "text": "$t:academy.reservation.form.no_slots"
+                              },
+                              {
+                                "type": "basic",
+                                "name": "Div",
+                                "if": "{{(_local.slots ?? []).length > 0}}",
+                                "props": {
+                                  "className": "md:col-span-2 space-y-3"
+                                },
+                                "children": [
+                                  {
+                                    "type": "basic",
+                                    "name": "Label",
+                                    "props": {
+                                      "className": "block text-sm font-medium text-slate-700 dark:text-slate-300"
+                                    },
+                                    "text": "$t:academy.reservation.form.slots"
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "Div",
+                                    "props": {
+                                      "className": "grid grid-cols-2 sm:grid-cols-4 gap-2"
+                                    },
+                                    "children": [
+                                      {
+                                        "type": "basic",
+                                        "name": "Button",
+                                        "iteration": {
+                                          "source": "{{_local.slots ?? []}}",
+                                          "item_var": "slot"
+                                        },
+                                        "props": {
+                                          "type": "button",
+                                          "className": "{{_local.form.booking_time === slot ? 'px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium' : 'px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-medium'}}"
+                                        },
+                                        "text": "{{slot}}",
+                                        "actions": [
+                                          {
+                                            "type": "click",
+                                            "handler": "setState",
+                                            "params": {
+                                              "target": "local",
+                                              "form": {
+                                                "booking_time": "{{slot}}"
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "P",
+                                    "if": "{{_local.errors?.booking_time}}",
+                                    "props": {
+                                      "className": "text-sm text-red-600 dark:text-red-400"
+                                    },
+                                    "text": "{{_local.errors.booking_time?.[0] ?? _local.errors.booking_time ?? ''}}"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "basic",
+                                "name": "Div",
+                                "children": [
+                                  {
+                                    "type": "basic",
+                                    "name": "Label",
+                                    "props": {
+                                      "className": "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                                    },
+                                    "text": "$t:academy.reservation.form.name"
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "Input",
+                                    "props": {
+                                      "type": "text",
+                                      "name": "customer_name",
+                                      "placeholder": "$t:academy.reservation.form.name_placeholder",
+                                      "className": "w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white",
+                                      "required": true
+                                    }
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "P",
+                                    "if": "{{_local.errors?.customer_name}}",
+                                    "props": {
+                                      "className": "mt-1 text-sm text-red-600 dark:text-red-400"
+                                    },
+                                    "text": "{{_local.errors.customer_name?.[0] ?? _local.errors.customer_name ?? ''}}"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "basic",
+                                "name": "Div",
+                                "children": [
+                                  {
+                                    "type": "basic",
+                                    "name": "Label",
+                                    "props": {
+                                      "className": "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                                    },
+                                    "text": "$t:academy.reservation.form.phone"
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "Input",
+                                    "props": {
+                                      "type": "tel",
+                                      "name": "customer_phone",
+                                      "placeholder": "$t:academy.reservation.form.phone_placeholder",
+                                      "className": "w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white",
+                                      "required": true
+                                    }
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "P",
+                                    "if": "{{_local.errors?.customer_phone}}",
+                                    "props": {
+                                      "className": "mt-1 text-sm text-red-600 dark:text-red-400"
+                                    },
+                                    "text": "{{_local.errors.customer_phone?.[0] ?? _local.errors.customer_phone ?? ''}}"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "basic",
+                                "name": "Div",
+                                "props": {
+                                  "className": "md:col-span-2"
+                                },
+                                "children": [
+                                  {
+                                    "type": "basic",
+                                    "name": "Label",
+                                    "props": {
+                                      "className": "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                                    },
+                                    "text": "$t:academy.reservation.form.memo"
+                                  },
+                                  {
+                                    "type": "basic",
+                                    "name": "Textarea",
+                                    "props": {
+                                      "name": "memo",
+                                      "rows": 4,
+                                      "placeholder": "$t:academy.reservation.form.memo_placeholder",
+                                      "className": "w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "basic",
+                                "name": "Div",
+                                "props": {
+                                  "className": "md:col-span-2"
+                                },
+                                "children": [
+                                  {
+                                    "type": "basic",
+                                    "name": "Button",
+                                    "props": {
+                                      "type": "submit",
+                                      "className": "w-full py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium disabled:opacity-50",
+                                      "disabled": "{{_local.isSubmitting || _local.verificationStatus?.verified !== true || !_local.form.booking_time}}"
+                                    },
+                                    "text": "{{_local.isSubmitting ? '$t:academy.reservation.form.submitting' : '$t:academy.reservation.form.submit'}}"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

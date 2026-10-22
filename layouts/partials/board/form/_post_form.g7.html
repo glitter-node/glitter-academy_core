@@ -1,0 +1,153 @@
+<partial>
+  <form id="form" class="{{!form_meta?.data || !form_data?.data ? 'space-y-6 opacity-50 pointer-events-none' : 'space-y-6'}}">
+    <div data-if="{{_local.errors &amp;&amp; (typeof _local.errors === 'string' || Object.keys(_local.errors).length > 0)}}" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
+      <div class="flex items-start gap-3">
+        <icon name="triangle-exclamation" class="text-red-600 dark:text-red-400 mt-0.5" size="lg"/>
+        <div class="flex-1">
+          <h3 class="text-sm font-semibold text-red-800 dark:text-red-200 mb-2">$t:common.validation_errors</h3>
+          <ul data-each="message in typeof _local.errors === 'string' ? [_local.errors] : Object.entries(_local.errors ?? {}).flatMap(([field, messages]) => Array.isArray(messages) ? messages : [messages])" class="list-disc list-inside space-y-1 text-sm text-red-700 dark:text-red-300">
+            <li class="text-sm text-red-700 dark:text-red-300">{{message}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div data-if="{{route.id &amp;&amp; form_data?.data?.author}}" class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
+      <avatar data-type="composite" author="{{form_data?.data?.author}}" size="md"/>
+      <div>
+        <user-info data-type="composite" userId="{{form_data?.data?.author?.uuid}}" name="{{form_data?.data?.author?.name}}" isGuest="{{!form_data?.data?.author?.uuid}}" :showDropdown="false" :clickable="false" class="text-sm font-medium"/>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">$t:board.created_at: {{form_data?.data?.created_at}}</p>
+      </div>
+    </div>
+    <div data-if="{{form_meta?.data?.board?.user_abilities?.can_manage || form_meta?.data?.board?.secret_mode === 'enabled' || form_meta?.data?.board?.secret_mode === 'always'}}">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label data-if="{{form_meta?.data?.board?.user_abilities?.can_manage &amp;&amp; !_local.form?.parent_id}}" class="block bg-white dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors">
+          <div class="flex items-start gap-3">
+            <input type="checkbox" name="is_notice" class="mt-0.5 w-4 h-4 text-teal-600 bg-slate-100 border-slate-300 rounded focus:ring-teal-500 dark:focus:ring-teal-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"/>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <icon name="bell" size="sm" class="text-teal-600 dark:text-teal-400"/>
+                <span class="text-sm font-semibold text-slate-900 dark:text-white">$t:board.form.is_notice</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400">$t:board.form.notice_description</p>
+            </div>
+          </div>
+        </label>
+        <label data-if="{{form_meta?.data?.board?.secret_mode === 'enabled'}}" class="block bg-white dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors">
+          <div class="flex items-start gap-3">
+            <input type="checkbox" name="is_secret" class="mt-0.5 w-4 h-4 text-amber-600 bg-slate-100 border-slate-300 rounded focus:ring-amber-500 dark:focus:ring-amber-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"/>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <icon name="lock" size="sm" class="text-amber-600 dark:text-amber-400"/>
+                <span class="text-sm font-semibold text-slate-900 dark:text-white">$t:board.form.secret_post</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400">$t:board.form.secret_description</p>
+            </div>
+          </div>
+        </label>
+        <div data-if="{{form_meta?.data?.board?.secret_mode === 'always'}}" class="bg-slate-100 dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700 opacity-75">
+          <input type="hidden" name="is_secret" value="true"/>
+          <div class="flex items-start gap-3">
+            <input type="checkbox" :checked="true" :disabled="true" class="mt-0.5 w-4 h-4 text-amber-600 bg-slate-100 border-slate-300 rounded dark:bg-slate-700 dark:border-slate-600 opacity-50 cursor-not-allowed"/>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <icon name="lock" size="sm" class="text-amber-600 dark:text-amber-400"/>
+                <span class="text-sm font-semibold text-slate-900 dark:text-white">$t:board.form.secret_post</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400">$t:board.form.secret_always_description</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-if="{{form_meta?.data?.board?.categories?.length > 0}}">
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">$t:board.form.category</label>
+      <select name="category" value="{{_local.form?.category ?? ''}}" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500" options="{{[{value: '', label: $t('board.form.select_category')}, ...(form_meta?.data?.board?.categories ?? []).map(c => ({value: c, label: c}))]}}">
+        <on event="change">
+          <set-state target="local" :hasChanges="true">
+            <field name="form">
+              <field name="category" value="{{$event.target.value}}"/>
+            </field>
+          </set-state>
+        </on>
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+        <span>$t:board.form.title</span>
+        <span class="text-red-500 ml-1">*</span>
+      </label>
+      <input type="text" name="title" placeholder="$t:board.form.title_placeholder" class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 {{_local.errors?.title ? 'border-red-500 dark:border-red-500 focus:ring-red-500' : 'border-slate-300 dark:border-slate-600 focus:ring-teal-500'}}"/>
+      <p data-if="{{_local.errors?.title}}" class="mt-1 text-sm text-red-600 dark:text-red-400">{{_local.errors?.title?.[0] ?? _local.errors?.title}}</p>
+    </div>
+    <div class="{{_local.errors?.content ? '[&amp;_textarea]:!border-red-500 [&amp;_textarea]:dark:!border-red-500 [&amp;_textarea]:focus:!ring-red-500' : ''}}">
+      <extension-point name="html_editor" data-ref="content_section" content="{{_local.form?.content ?? ''}}" isHtml="{{(_local.form?.content_mode ?? 'text') === 'html'}}" :rows="15" placeholder="$t:board.form.content_placeholder" label="$t:board.form.content" :showHtmlModeToggle="true">
+        <prop name="name">"content"</prop>
+        <default>
+          <html-editor data-type="composite" name="content" content="{{_local.form?.content ?? ''}}" isHtml="{{(_local.form?.content_mode ?? 'text') === 'html'}}" :rows="15" placeholder="$t:board.form.content_placeholder" label="$t:board.form.content" :showHtmlModeToggle="true">
+            <on type="change" event="onIsHtmlChange">
+              <set-state target="local">
+                <field name="form">
+                  <field name="content_mode" value="{{$args[0].target.checked ? 'html' : 'text'}}"/>
+                </field>
+              </set-state>
+            </on>
+          </html-editor>
+        </default>
+      </extension-point>
+    </div>
+    <p data-if="{{_local.errors?.content}}" class="mt-1 text-sm text-red-600 dark:text-red-400">{{_local.errors?.content?.[0] ?? _local.errors?.content}}</p>
+    <div data-if="{{form_meta?.data?.board?.use_file_upload === true &amp;&amp; form_meta?.data?.board?.user_abilities?.can_upload}}">
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+        <icon name="paperclip" size="sm" class="inline mr-1"/>
+        <span>$t:board.form.attachments</span>
+      </label>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">$t:board.form.attachments_desc|maxFiles={{form_meta?.data?.board?.max_file_count ?? 5}}|maxSize={{form_meta?.data?.board?.max_file_size ?? 10}}</p>
+      <file-uploader data-type="composite" collection="post_attachments" maxFiles="{{form_meta?.data?.board?.max_file_count ?? 5}}" maxSize="{{form_meta?.data?.board?.max_file_size ?? 10}}" accept="{{form_meta?.data?.board?.allowed_extensions ? '.' + form_meta?.data?.board?.allowed_extensions?.join(',.') : '.jpg,.jpeg,.png,.gif,.pdf,.zip'}}" initialFiles="{{form_meta?.data?.attachments ?? []}}" :autoUpload="false" uploadTriggerEvent="upload:board_attachments" :compact="true" :confirmBeforeRemove="true" confirmRemoveTitle="$t:board.posts.form.confirm_remove_attachment_title" confirmRemoveMessage="$t:board.posts.form.confirm_remove_attachment_message">
+        <prop name="uploadParams">
+          <field name="temp_key" value="{{_local.tempKey}}"/>
+        </prop>
+        <prop name="apiEndpoints">
+          <field name="upload" value="/api/modules/sirsoft-board/boards/{{route.slug}}/attachments"/>
+          <field name="delete" value="/api/modules/sirsoft-board/boards/{{route.slug}}/attachments/:id"/>
+          <field name="reorder" value="/api/modules/sirsoft-board/boards/{{route.slug}}/attachments/reorder"/>
+        </prop>
+        <on type="change" event="onFilesChange">
+          <set-state if="{{!_local.hasChanges}}" target="local" :hasChanges="true"/>
+        </on>
+        <on type="change" event="onUploadError">
+          <set-state target="local" uploadError="{{$args[0]}}" :isSaving="false"/>
+          <toast type="error" message="{{$args[0]}}" icon="triangle-exclamation"/>
+        </on>
+      </file-uploader>
+    </div>
+    <div class="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+      <button type="button" class="px-4 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer">
+        <on type="click">
+          <navigate path="{{route.id ? '/board/' + route.slug + '/' + route.id : '/board/' + route.slug}}"/>
+        </on>
+        $t:common.cancel
+      </button>
+      <button type="button" disabled="{{!_local?.tempKey || _local?.isSaving}}" class="flex items-center gap-2 px-4 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-700 dark:hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed">
+        <on type="click">
+          <set-state target="local" :isSaving="true" :errors="null"/>
+          <emit-event event="upload:board_attachments"/>
+          <api-call target="{{route.id ? '/api/modules/sirsoft-board/boards/' + route.slug + '/posts/' + route.id : '/api/modules/sirsoft-board/boards/' + route.slug + '/posts'}}" :auth_required="true" method="{{route.id ? 'PUT' : 'POST'}}" body="{{Object.assign({}, _local.form, { temp_key: _local?.tempKey })}}">
+            <success>
+              <set-state target="local" :isSaving="false" :hasChanges="false" :errors="null"/>
+              <toast type="success" message="{{route?.id ? '$t:board.post_updated' : '$t:board.post_created'}}"/>
+              <navigate path="/board/{{route?.slug}}/{{result?.data?.id}}"/>
+            </success>
+            <fail>
+              <set-state target="local" :isSaving="false" errors="{{error?.errors ?? null}}"/>
+              <toast type="error" message="{{error?.message ?? '$t:common.error_occurred'}}"/>
+            </fail>
+          </api-call>
+        </on>
+        <icon data-if="{{_local?.isSaving}}" name="spinner" size="sm" class="animate-spin"/>
+        <span data-if="{{_local?.isSaving}}">$t:common.saving</span>
+        <span data-if="{{!_local?.isSaving &amp;&amp; route?.id}}">$t:common.save</span>
+        <span data-if="{{!_local?.isSaving &amp;&amp; !route?.id}}">$t:board.form.submit</span>
+      </button>
+    </div>
+  </form>
+</partial>

@@ -1,0 +1,33 @@
+<partial>
+  <div class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+    <div data-if="{{(_global.searchActiveTab ?? 'all') === 'all'}}" class="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50">
+      <div class="flex items-center gap-2">
+        <icon name="file-alt" size="sm" class="text-slate-500 dark:text-slate-400"/>
+        <span class="font-medium text-slate-900 dark:text-white">$t:search.tabs.pages</span>
+        <span class="text-sm text-teal-600 dark:text-teal-400">{{(searchResults?.data?.pages_count ?? 0) | number}}</span>
+      </div>
+      <button data-if="{{(searchResults?.data?.pages_count ?? 0) > 0}}" class="text-sm text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1">
+        <on type="click">
+          <set-state target="global" searchActiveTab="pages" :searchPage="1"/>
+          <refetch-data-source dataSourceId="searchResults"/>
+        </on>
+        <span>$t:search.view_all</span>
+        <icon name="chevron-right" size="sm"/>
+      </button>
+    </div>
+    <div data-if="{{searchResults?.data?.pages?.items?.length > 0}}" data-each="page, pageIdx in {{searchResults?.data?.pages?.items ?? []}}">
+      <div data-if="{{pageIdx > 0}}" class="border-t border-slate-200 dark:border-slate-700"/>
+      <button class="block w-full text-left p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer">
+        <on type="click">
+          <navigate path="{{page.url}}"/>
+        </on>
+        <html-content data-type="composite" content="{{page.title_highlighted ?? page.title}}" class="font-medium text-slate-900 dark:text-white mb-1 [&amp;_mark]:bg-teal-100 [&amp;_mark]:dark:bg-teal-500/30 [&amp;_mark]:px-0.5 [&amp;_mark]:rounded"/>
+        <html-content data-type="composite" content="{{page.content_preview_highlighted ?? page.content_preview}}" class="text-sm text-slate-600 dark:text-slate-400 mb-2 line-clamp-2 [&amp;_mark]:bg-teal-100 [&amp;_mark]:dark:bg-teal-500/30 [&amp;_mark]:px-0.5 [&amp;_mark]:rounded"/>
+        <p class="text-xs text-slate-500 dark:text-slate-400">$t:search.page_published_at|date={{page.published_at ?? ''}}</p>
+      </button>
+    </div>
+    <div data-if="{{!searchResults?.data?.pages?.items || searchResults?.data?.pages?.items?.length === 0}}" class="px-4 py-6 text-center text-sm text-slate-500 dark:text-slate-400">
+      <span>$t:search.empty.pages_in_all</span>
+    </div>
+  </div>
+</partial>

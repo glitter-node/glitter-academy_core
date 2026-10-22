@@ -1,0 +1,151 @@
+<partial>
+  <div>
+    <div class="flex justify-between items-start mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">{{posts?.data?.board?.name ?? ''}}</h1>
+        <p data-if="{{posts?.data?.board?.description}}" class="text-slate-600 dark:text-slate-400 mt-1">{{posts?.data?.board?.description}}</p>
+      </div>
+      <include src="../../index/_write_button.g7.html"/>
+    </div>
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4">
+      <select data-if="{{posts?.data?.board?.categories &amp;&amp; posts?.data?.board?.categories.length > 0}}" value="{{query.category || 'all'}}" class="w-full sm:w-auto sm:min-w-48 px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white text-sm" options="{{[{value:'all', label:'$t:board.filter.category_all'},{value:'unclassified', label:'$t:board.filter.category_unclassified'}].concat((posts?.data?.board?.categories ?? []).map(function(c){return{value:c,label:c};}))}}">
+        <on type="change">
+          <navigate path="/board/{{route.slug}}" :mergeQuery="true">
+            <query category="{{$event.target.value === 'all' ? '' : $event.target.value}}" :page="1"/>
+          </navigate>
+        </on>
+      </select>
+      <button data-if="{{posts?.data?.abilities?.can_view_deleted}}" type="button" class="{{query.del === '1' ? 'inline-flex items-center gap-1.5 px-3 py-2 border-2 border-teal-600 dark:border-teal-400 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-lg text-sm font-medium' : 'inline-flex items-center gap-1.5 px-3 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg text-sm hover:bg-slate-50 dark:hover:bg-slate-700'}}">
+        <on type="click">
+          <navigate path="/board/{{route.slug}}" :mergeQuery="true">
+            <query del="{{query.del === '1' ? '' : '1'}}" :page="1"/>
+          </navigate>
+        </on>
+        <icon name="eye" size="sm"/>
+        <span>$t:board.filter.include_deleted</span>
+      </button>
+      <div class="w-full sm:w-auto sm:ml-auto">
+        <search-bar data-type="composite" name="search" placeholder="$t:board.search_placeholder" value="{{query.search || ''}}" :showButton="false" class="w-full sm:w-64">
+          <on type="submit">
+            <navigate path="/board/{{route.slug}}" :mergeQuery="true">
+              <query search="{{$event.target.search.value}}" :page="1"/>
+            </navigate>
+          </on>
+        </search-bar>
+      </div>
+    </div>
+    <div>
+      <div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-x-auto">
+        <div class="hidden lg:grid {{posts?.data?.board?.settings?.show_view_count !== false ? 'grid-cols-[60px_minmax(300px,1fr)_160px_100px_70px]' : 'grid-cols-[60px_minmax(300px,1fr)_160px_100px]'}} gap-4 px-4 py-3 bg-slate-100 dark:bg-slate-700 border-b-2 border-slate-200 dark:border-slate-600 font-medium text-sm text-slate-700 dark:text-slate-300">
+          <span class="text-center">$t:board.no</span>
+          <span>$t:board.title</span>
+          <span>$t:board.author</span>
+          <span class="text-center">$t:board.created_at</span>
+          <span data-if="{{posts?.data?.board?.settings?.show_view_count !== false}}" class="text-center">$t:board.views</span>
+        </div>
+        <div data-each="post in {{posts?.data?.data ?? []}}">
+          <button class="{{post?.row_type === 'notice' ? 'bg-teal-50 dark:bg-teal-900/20' : ''}} block w-full text-left hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer border-b border-slate-100 dark:border-slate-700">
+            <on type="click">
+              <navigate path="/board/{{route?.slug}}/{{post?.id}}"/>
+            </on>
+            <div class="hidden lg:grid {{posts?.data?.board?.settings?.show_view_count !== false ? 'grid-cols-[60px_minmax(300px,1fr)_160px_100px_70px]' : 'grid-cols-[60px_minmax(300px,1fr)_160px_100px]'}} gap-4 px-4 py-3 items-center">
+              <div class="flex justify-center">
+                <span data-if="{{post?.row_type === 'notice'}}" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-bold bg-teal-600 text-white dark:bg-teal-500">
+                  <span>{{post?.number}}</span>
+                </span>
+                <span data-if="{{post?.row_type === 'reply'}}" class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300 flex-shrink-0">$t:board.post.reply</span>
+                <span data-if="{{post?.row_type === 'normal'}}" class="text-sm text-slate-500 dark:text-slate-400">{{post?.number}}</span>
+              </div>
+              <div class="flex items-center gap-2 min-w-0">
+                <class-map key="{{Math.min(post?.depth ?? 0, 10)}}" default="ml-0">
+                  <variant when="0">ml-0</variant>
+                  <variant when="1">ml-4</variant>
+                  <variant when="2">ml-8</variant>
+                  <variant when="3">ml-12</variant>
+                  <variant when="4">ml-16</variant>
+                  <variant when="5">ml-20</variant>
+                  <variant when="6">ml-24</variant>
+                  <variant when="7">ml-28</variant>
+                  <variant when="8">ml-32</variant>
+                  <variant when="9">ml-36</variant>
+                  <variant when="10">ml-40</variant>
+                </class-map>
+                <icon data-if="{{post?.row_type === 'reply'}}" name="turn-up" size="sm" class="fa-rotate-90 text-slate-400 dark:text-slate-500 flex-shrink-0"/>
+                <span data-if="{{post?.category}}" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 flex-shrink-0">{{post?.category}}</span>
+                <icon data-if="{{post?.is_secret}}" name="lock" size="sm" class="text-slate-500 dark:text-slate-400 flex-shrink-0"/>
+                <icon data-if="{{post?.status === 'blinded'}}" name="eye-slash" size="sm" class="text-orange-300 flex-shrink-0"/>
+                <span class="text-sm font-medium truncate {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-300'}}">{{post?.title}}</span>
+                <icon data-if="{{post?.has_attachment}}" name="paperclip" size="sm" class="text-slate-500 dark:text-slate-400 flex-shrink-0"/>
+                <span data-if="{{posts?.data?.board?.settings?.use_comment &amp;&amp; post?.comment_count > 0}}" class="text-teal-600 dark:text-teal-400 text-sm font-medium flex-shrink-0">[{{post?.comment_count}}]</span>
+                <span data-if="{{post?.deleted_at}}" class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 flex-shrink-0">$t:board.post.deleted_badge</span>
+                <span data-if="{{post?.is_new}}" class="px-1.5 py-0.5 text-xs bg-red-500 text-white rounded flex-shrink-0">$t:board.new_badge_short</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <avatar data-type="composite" author="{{post?.author}}" size="xs" class="{{(post?.status === 'blinded' || post?.deleted_at) ? 'opacity-40' : ''}}"/>
+                <user-info data-type="composite" author="{{post?.author}}" :showDropdown="true" :stopPropagation="true" class="text-sm {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400 dark:text-slate-500' : 'text-slate-500 dark:text-slate-400'}}"/>
+              </div>
+              <span class="text-sm text-center whitespace-nowrap {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400 dark:text-slate-500' : 'text-slate-500 dark:text-slate-400'}}" title="{{post?.created_at ?? ''}}">{{post?.created_at_formatted ?? ''}}</span>
+              <span data-if="{{posts?.data?.board?.settings?.show_view_count !== false}}" class="text-sm text-center {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400 dark:text-slate-500' : 'text-slate-500 dark:text-slate-400'}}">{{post?.view_count}}</span>
+            </div>
+            <div class="flex flex-col gap-2 px-4 py-3 lg:hidden">
+              <div class="flex items-start gap-2">
+                <span data-if="{{post?.row_type === 'notice'}}" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-teal-600 text-white dark:bg-teal-500 flex-shrink-0">
+                  <span>{{post?.number}}</span>
+                </span>
+                <span data-if="{{post?.row_type === 'reply'}}" class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300 flex-shrink-0 mt-0.5">$t:board.post.reply</span>
+                <span data-if="{{post?.row_type === 'normal'}}" class="text-xs text-slate-500 dark:text-slate-400 flex-shrink-0 mt-0.5">#{{post?.number}}</span>
+                <div class="flex-1 min-w-0">
+                  <class-map key="{{Math.min(post?.depth ?? 0, 10)}}" default="ml-0">
+                    <variant when="0">ml-0</variant>
+                    <variant when="1">ml-4</variant>
+                    <variant when="2">ml-8</variant>
+                    <variant when="3">ml-12</variant>
+                    <variant when="4">ml-16</variant>
+                    <variant when="5">ml-20</variant>
+                    <variant when="6">ml-24</variant>
+                    <variant when="7">ml-28</variant>
+                    <variant when="8">ml-32</variant>
+                    <variant when="9">ml-36</variant>
+                    <variant when="10">ml-40</variant>
+                  </class-map>
+                  <div class="flex items-center gap-2">
+                    <icon data-if="{{post?.row_type === 'reply'}}" name="turn-up" size="sm" class="fa-rotate-90 text-slate-400 dark:text-slate-500 flex-shrink-0"/>
+                    <span data-if="{{post?.category}}" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 flex-shrink-0">{{post?.category}}</span>
+                    <icon data-if="{{post?.is_secret}}" name="lock" size="sm" class="text-slate-500 dark:text-slate-400 flex-shrink-0"/>
+                    <icon data-if="{{post?.status === 'blinded'}}" name="eye-slash" size="sm" class="text-orange-300 flex-shrink-0"/>
+                    <span class="text-sm font-medium {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-300'}}">{{post?.title}}</span>
+                    <icon data-if="{{post?.has_attachment}}" name="paperclip" size="sm" class="text-slate-500 dark:text-slate-400 flex-shrink-0"/>
+                    <span data-if="{{posts?.data?.board?.settings?.use_comment &amp;&amp; post?.comment_count > 0}}" class="text-teal-600 dark:text-teal-400 text-sm font-medium flex-shrink-0">[{{post?.comment_count}}]</span>
+                    <span data-if="{{post?.deleted_at}}" class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 flex-shrink-0">$t:board.post.deleted_badge</span>
+                    <span data-if="{{post?.is_new}}" class="px-1.5 py-0.5 text-xs bg-red-500 text-white rounded flex-shrink-0">$t:board.new_badge_short</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center justify-between text-xs {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400 dark:text-slate-500' : 'text-slate-500 dark:text-slate-400'}}">
+                <div class="flex items-center gap-2">
+                  <avatar data-type="composite" author="{{post?.author}}" size="xs" class="{{(post?.status === 'blinded' || post?.deleted_at) ? 'opacity-40' : ''}}"/>
+                  <user-info data-type="composite" author="{{post?.author}}" :showDropdown="true" :stopPropagation="true" class="text-xs {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400 dark:text-slate-500' : 'text-slate-500 dark:text-slate-400'}}"/>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span title="{{post?.created_at ?? ''}}">{{post?.created_at_formatted ?? ''}}</span>
+                  <span data-if="{{posts?.data?.board?.settings?.show_view_count !== false}}">$t:board.views_count|count={{post?.view_count}}</span>
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <include src="../../index/_empty_states.g7.html"/>
+    <pagination data-type="composite" currentPage="{{posts?.data?.pagination?.current_page ?? 1}}" totalPages="{{posts?.data?.pagination?.last_page ?? 1}}" class="mt-6 justify-center">
+      <on event="onPageChange">
+        <navigate path="/board/{{route?.slug}}" :mergeQuery="true">
+          <query page="{{$args[0]}}" category="{{query.category}}" filters[0][field]="{{query['filters[0][field]']}}" filters[0][value]="{{query['filters[0][value]']}}" filters[0][operator]="{{query['filters[0][operator]']}}"/>
+        </navigate>
+      </on>
+    </pagination>
+    <div class="flex justify-end mt-4">
+      <include src="../../index/_write_button.g7.html"/>
+    </div>
+  </div>
+</partial>

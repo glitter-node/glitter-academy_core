@@ -1,0 +1,13 @@
+<partial>
+  <tab-navigation data-type="composite" data-ref="mypageTabNavigation" variant="underline" class="mb-6" activeTabId="{{_computed?.currentTab}}">
+    <prop name="tabs">
+      <item id="profile" label="$t:mypage.tabs.profile" iconName="user"/>
+      <item id="board" label="$t:mypage.tabs.board" iconName="message-square"/>
+      <item id="reservations" label="$t:mypage.tabs.reservations" iconName="calendar"/>
+      <item id="notifications" label="$t:mypage.tabs.notifications" iconName="bell"/>
+    </prop>
+    <on type="change" event="onTabChange">
+      <navigate path="{{`/mypage/${$args[0]}`}}"/>
+    </on>
+  </tab-navigation>
+</partial>

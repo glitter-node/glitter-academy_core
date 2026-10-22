@@ -1,0 +1,106 @@
+<partial>
+  <div class="mt-6">
+    <blur-until-loaded sources="userNotifications"/>
+    <responsive on="portable" class="mt-4"/>
+    <div class="bg-white dark:bg-slate-800 rounded-lg overflow-hidden">
+      <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+        <responsive on="portable" class="flex flex-col gap-2 p-3 border-b border-slate-200 dark:border-slate-700"/>
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-red-500 dark:text-red-400 font-medium">$t:mypage.notifications.unread_count|count={{userNotifications.data?.unread_count ?? 0}}</span>
+          <label class="flex items-center gap-1.5 cursor-pointer select-none">
+            <input type="checkbox" checked="{{_local.userNotificationsUnreadOnly ?? false}}" class="w-3.5 h-3.5 rounded border-slate-300 dark:border-slate-600 text-teal-600 focus:ring-teal-500 cursor-pointer">
+              <on type="change">
+                <set-state target="local" userNotificationsUnreadOnly="{{$event.target.checked}}" :notificationsPage="1"/>
+                <refetch-data-source dataSourceId="userNotifications"/>
+              </on>
+            </input>
+            <span class="text-xs text-slate-600 dark:text-slate-400">$t:mypage.notifications.unread_only</span>
+          </label>
+        </div>
+        <div class="flex items-center gap-3">
+          <responsive on="portable" class="flex items-center justify-end gap-3"/>
+          <button data-if="{{userNotifications.data.data &amp;&amp; userNotifications.data.data.length > 0}}" class="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" type="button">
+            <on type="click">
+              <api-call :auth_required="true" target="/api/user/notifications/read-all" method="POST">
+                <success>
+                  <refetch-data-source dataSourceId="userNotifications"/>
+                  <refetch-data-source dataSourceId="notification_unread_count"/>
+                  <set-state target="global" :notificationCount="0"/>
+                </success>
+              </api-call>
+            </on>
+            $t:mypage.notifications.mark_all_read
+          </button>
+          <button data-if="{{userNotifications.data.data &amp;&amp; userNotifications.data.data.length > 0}}" class="text-sm text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors" type="button">
+            <on type="click">
+              <open-modal target="notification_delete_all_confirm_modal"/>
+            </on>
+            $t:mypage.notifications.delete_all
+          </button>
+        </div>
+      </div>
+      <div data-if="{{userNotifications.data.data &amp;&amp; userNotifications.data.data.length > 0}}" data-each="notification in {{userNotifications.data.data ?? []}}" class="divide-y divide-slate-200 dark:divide-slate-700">
+        <div class="p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer {{notification.read_at ? '' : 'bg-red-50/30 dark:bg-red-900/10'}}">
+          <responsive on="portable" class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer {{notification.read_at ? '' : 'bg-red-50/30 dark:bg-red-900/10'}}"/>
+          <on type="click">
+            <api-call if="{{!notification.read_at}}" :auth_required="true" target="/api/user/notifications/{{notification.id}}/read" method="PATCH">
+              <success>
+                <refetch-data-source dataSourceId="notification_unread_count"/>
+                <set-state target="global" notificationCount="{{Math.max(0, (_global.notificationCount ?? 0) - 1)}}"/>
+              </success>
+            </api-call>
+            <navigate if="{{notification.url}}" path="{{notification.url}}"/>
+          </on>
+          <div class="flex items-start gap-3">
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <div data-if="{{!notification.read_at}}" class="w-2 h-2 rounded-full bg-red-500"/>
+              <div class="w-10 h-10 rounded-full flex items-center justify-center {{notification.type === 'order' ? 'bg-green-100 dark:bg-green-900/30' : notification.type === 'comment' ? 'bg-teal-100 dark:bg-teal-900/30' : notification.type === 'shipping' ? 'bg-orange-100 dark:bg-orange-900/30' : notification.type === 'promotion' ? 'bg-teal-100 dark:bg-teal-900/30' : 'bg-slate-100 dark:bg-slate-700'}}">
+                <responsive on="portable" class="w-9 h-9 rounded-full flex items-center justify-center {{notification.type === 'order' ? 'bg-green-100 dark:bg-green-900/30' : notification.type === 'comment' ? 'bg-teal-100 dark:bg-teal-900/30' : notification.type === 'shipping' ? 'bg-orange-100 dark:bg-orange-900/30' : notification.type === 'promotion' ? 'bg-teal-100 dark:bg-teal-900/30' : 'bg-slate-100 dark:bg-slate-700'}}"/>
+                <icon name="{{notification.type === 'order' ? 'shopping-cart' : notification.type === 'comment' ? 'message-square' : notification.type === 'shipping' ? 'truck' : notification.type === 'promotion' ? 'gift' : 'bell'}}" class="w-5 h-5 {{notification.type === 'order' ? 'text-green-600 dark:text-green-400' : notification.type === 'comment' ? 'text-teal-600 dark:text-teal-400' : notification.type === 'shipping' ? 'text-orange-600 dark:text-orange-400' : notification.type === 'promotion' ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-400'}}">
+                  <responsive on="portable" name="{{notification.type === 'order' ? 'shopping-cart' : notification.type === 'comment' ? 'message-square' : notification.type === 'shipping' ? 'truck' : notification.type === 'promotion' ? 'gift' : 'bell'}}" class="w-4 h-4 {{notification.type === 'order' ? 'text-green-600 dark:text-green-400' : notification.type === 'comment' ? 'text-teal-600 dark:text-teal-400' : notification.type === 'shipping' ? 'text-orange-600 dark:text-orange-400' : notification.type === 'promotion' ? 'text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-400'}}"/>
+                </icon>
+              </div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="text-sm text-slate-900 dark:text-white truncate {{notification.read_at ? '' : 'font-semibold'}}">{{notification.subject ?? ''}}</span>
+                  <span data-if="{{notification.type_label}}" class="flex-shrink-0 px-2 py-0.5 text-xs rounded {{notification.type === 'order' ? 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300' : notification.type === 'comment' ? 'bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300' : notification.type === 'shipping' ? 'bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300' : notification.type === 'promotion' ? 'bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'}}">{{notification.type_label}}</span>
+                </div>
+                <button class="flex-shrink-0 p-1.5 text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" type="button">
+                  <on type="click">
+                    <action handler="stopPropagation"/>
+                  </on>
+                  <on type="click">
+                    <api-call :auth_required="true" target="/api/user/notifications/{{notification.id}}" method="DELETE">
+                      <success>
+                        <refetch-data-source dataSourceId="userNotifications"/>
+                        <refetch-data-source dataSourceId="notification_unread_count"/>
+                        <set-state if="{{!notification.read_at}}" target="global" notificationCount="{{Math.max(0, (_global.notificationCount ?? 0) - 1)}}"/>
+                      </success>
+                    </api-call>
+                  </on>
+                  <icon name="trash-can" class="w-4 h-4"/>
+                </button>
+              </div>
+              <p class="text-sm text-slate-600 dark:text-slate-400 mb-1">{{notification.body ?? ''}}</p>
+              <span class="text-xs text-slate-400 dark:text-slate-500">{{notification.created_at | datetime}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-if="{{!userNotifications.data.data || userNotifications.data.data.length === 0}}" class="p-12 text-center">
+        <responsive on="portable" class="p-8 text-center"/>
+        <icon name="bell-off" class="w-12 h-12 mx-auto text-slate-300 dark:text-slate-600 mb-3"/>
+        <p class="text-slate-500 dark:text-slate-400">$t:mypage.notifications.empty</p>
+      </div>
+      <pagination data-type="composite" data-if="{{userNotifications.data.last_page > 1}}" currentPage="{{userNotifications.data.current_page}}" totalPages="{{userNotifications.data.last_page}}" class="p-4 border-t border-slate-200 dark:border-slate-700">
+        <responsive on="portable" currentPage="{{userNotifications.data.current_page}}" totalPages="{{userNotifications.data.last_page}}" class="p-3 border-t border-slate-200 dark:border-slate-700"/>
+        <on event="onPageChange">
+          <set-state target="local" notificationsPage="{{$args[0]}}"/>
+          <refetch-data-source dataSourceId="userNotifications"/>
+        </on>
+      </pagination>
+    </div>
+  </div>
+</partial>

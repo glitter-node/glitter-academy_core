@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "is_partial": true
+  },
+  "type": "basic",
+  "name": "Div",
+  "props": {
+    "className": "bg-slate-50/60 dark:bg-slate-900/40 rounded-xl p-3 shadow-none border border-slate-200/40 dark:border-slate-800/60"
+  },
+  "children": [
+    {
+      "type": "basic",
+      "name": "Div",
+      "props": {
+        "className": "flex items-center gap-2.5"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Div",
+          "props": {
+            "className": "w-9 h-9 rounded-lg flex items-center justify-center bg-teal-50/70 dark:bg-teal-900/20"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "Icon",
+              "props": {
+                "name": "comments",
+                "className": "w-4 h-4 text-teal-600 dark:text-teal-400"
+              }
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "name": "Div",
+          "children": [
+            {
+              "type": "basic",
+              "name": "Span",
+              "props": {
+                "className": "text-lg font-semibold text-slate-800 dark:text-slate-100"
+              },
+              "text": "{{stats?.data?.comments ?? 0 | number}}"
+            },
+            {
+              "type": "basic",
+              "name": "P",
+              "props": {
+                "className": "text-sm text-slate-500 dark:text-slate-500"
+              },
+              "text": "$t:home.stats.comments"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

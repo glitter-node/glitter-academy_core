@@ -1,0 +1,220 @@
+{
+  "version": "1.0.0",
+  "layout_name": "academy/timetable",
+  "extends": "_user_base",
+  "meta": {
+    "title": "$t:academy.pages.timetable.meta_title",
+    "description": "$t:academy.pages.timetable.meta_description"
+  },
+  "data_sources": [
+    {
+      "id": "reservation_services",
+      "type": "api",
+      "endpoint": "/modules/glitter-reservation/reservation/services",
+      "method": "GET",
+      "auto_fetch": true,
+      "auth_mode": "none",
+      "loading_strategy": "progressive",
+      "fallback": {
+        "data": []
+      },
+      "errorHandling": {
+        "404": {
+          "handler": "suppress"
+        },
+        "default": {
+          "handler": "suppress"
+        }
+      }
+    }
+  ],
+  "slots": {
+    "content": [
+      {
+        "type": "layout",
+        "name": "Container",
+        "props": {
+          "className": "py-10 px-4"
+        },
+        "children": [
+          {
+            "type": "basic",
+            "name": "Div",
+            "props": {
+              "className": "max-w-5xl mx-auto space-y-8"
+            },
+            "children": [
+              {
+                "type": "basic",
+                "name": "Div",
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "H1",
+                    "props": {
+                      "className": "text-3xl font-bold text-slate-900 dark:text-white mb-3"
+                    },
+                    "text": "$t:academy.pages.timetable.title"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "text-lg text-slate-600 dark:text-slate-300 max-w-3xl"
+                    },
+                    "text": "$t:academy.reservation.availability.body"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "grid grid-cols-1 md:grid-cols-4 gap-4"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "props": {
+                      "className": "p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                    },
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "H2",
+                        "props": {
+                          "className": "text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2"
+                        },
+                        "text": "$t:academy.reservation.availability.published_services"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "props": {
+                          "className": "text-3xl font-bold text-slate-900 dark:text-white"
+                        },
+                        "text": "{{reservation_services?.data?.length ?? 0}}"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "props": {
+                      "className": "p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                    },
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "H2",
+                        "props": {
+                          "className": "text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2"
+                        },
+                        "text": "$t:academy.reservation.availability.live_slots"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "props": {
+                          "className": "text-base font-medium text-slate-900 dark:text-white"
+                        },
+                        "text": "$t:academy.reservation.form.check_slots"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "props": {
+                      "className": "p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                    },
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "H2",
+                        "props": {
+                          "className": "text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2"
+                        },
+                        "text": "$t:academy.reservation.availability.email_verification"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "props": {
+                          "className": "text-base font-medium text-slate-900 dark:text-white"
+                        },
+                        "text": "$t:academy.reservation.form.verification_title"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "props": {
+                      "className": "p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                    },
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "H2",
+                        "props": {
+                          "className": "text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2"
+                        },
+                        "text": "$t:academy.reservation.availability.mypage_history"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Button",
+                        "props": {
+                          "type": "button",
+                          "className": "text-base font-medium text-emerald-700 dark:text-emerald-300"
+                        },
+                        "text": "$t:mypage.reservations.title",
+                        "actions": [
+                          {
+                            "type": "click",
+                            "handler": "navigate",
+                            "params": {
+                              "path": "/mypage/reservations",
+                              "mergeQuery": false
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "p-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "H2",
+                    "props": {
+                      "className": "text-xl font-semibold text-slate-900 dark:text-white mb-2"
+                    },
+                    "text": "$t:academy.reservation.operation.title"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "text-slate-600 dark:text-slate-300"
+                    },
+                    "text": "$t:academy.reservation.operation.body"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

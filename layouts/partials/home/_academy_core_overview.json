@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "is_partial": true
+  },
+  "type": "basic",
+  "name": "Div",
+  "props": {
+    "className": "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6"
+  },
+  "children": [
+    {
+      "type": "basic",
+      "name": "H2",
+      "props": {
+        "className": "text-2xl font-bold text-slate-900 dark:text-white mb-2"
+      },
+      "text": "$t:academy.home.title"
+    },
+    {
+      "type": "basic",
+      "name": "P",
+      "props": {
+        "className": "text-slate-600 dark:text-slate-300 mb-5 max-w-4xl"
+      },
+      "text": "$t:academy.home.body"
+    },
+    {
+      "type": "basic",
+      "name": "Div",
+      "props": {
+        "className": "grid grid-cols-1 md:grid-cols-3 gap-3 mb-5"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Div",
+          "props": {
+            "className": "p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "H3",
+              "props": {
+                "className": "font-semibold text-slate-900 dark:text-white mb-1"
+              },
+              "text": "$t:academy.reservation.identity.title"
+            },
+            {
+              "type": "basic",
+              "name": "P",
+              "props": {
+                "className": "text-sm text-slate-600 dark:text-slate-300"
+              },
+              "text": "$t:academy.reservation.identity.body"
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "name": "Div",
+          "props": {
+            "className": "p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "H3",
+              "props": {
+                "className": "font-semibold text-slate-900 dark:text-white mb-1"
+              },
+              "text": "$t:academy.reservation.availability.title"
+            },
+            {
+              "type": "basic",
+              "name": "P",
+              "props": {
+                "className": "text-sm text-slate-600 dark:text-slate-300"
+              },
+              "text": "$t:academy.reservation.availability.body"
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "name": "Div",
+          "props": {
+            "className": "p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg"
+          },
+          "children": [
+            {
+              "type": "basic",
+              "name": "H3",
+              "props": {
+                "className": "font-semibold text-slate-900 dark:text-white mb-1"
+              },
+              "text": "$t:academy.reservation.operation.title"
+            },
+            {
+              "type": "basic",
+              "name": "P",
+              "props": {
+                "className": "text-sm text-slate-600 dark:text-slate-300"
+              },
+              "text": "$t:academy.reservation.operation.body"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "basic",
+      "name": "Div",
+      "props": {
+        "className": "flex flex-wrap gap-2"
+      },
+      "children": [
+        {
+          "type": "basic",
+          "name": "Button",
+          "props": {
+            "type": "button",
+            "className": "px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          },
+          "actions": [
+            {
+              "type": "click",
+              "handler": "navigate",
+              "params": {
+                "path": "/programs"
+              }
+            }
+          ],
+          "text": "$t:academy.home.programs_button"
+        },
+        {
+          "type": "basic",
+          "name": "Button",
+          "props": {
+            "type": "button",
+            "className": "px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+          },
+          "actions": [
+            {
+              "type": "click",
+              "handler": "navigate",
+              "params": {
+                "path": "/consultation"
+              }
+            }
+          ],
+          "text": "$t:academy.home.consultation_button"
+        }
+      ]
+    }
+  ]
+}

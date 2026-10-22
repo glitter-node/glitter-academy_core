@@ -1,0 +1,45 @@
+{
+    "meta": {
+        "is_partial": true
+    },
+    "id": "mypageTabNavigation",
+    "type": "composite",
+    "name": "TabNavigation",
+    "actions": [
+        {
+            "type": "change",
+            "event": "onTabChange",
+            "handler": "navigate",
+            "params": {
+                "path": "{{`/mypage/${$args[0]}`}}"
+            }
+        }
+    ],
+    "props": {
+        "variant": "underline",
+        "className": "mb-6",
+        "activeTabId": "{{_computed?.currentTab}}",
+        "tabs": [
+            {
+                "id": "profile",
+                "label": "$t:mypage.tabs.profile",
+                "iconName": "user"
+            },
+            {
+                "id": "board",
+                "label": "$t:mypage.tabs.board",
+                "iconName": "message-square"
+            },
+            {
+                "id": "reservations",
+                "label": "$t:mypage.tabs.reservations",
+                "iconName": "calendar"
+            },
+            {
+                "id": "notifications",
+                "label": "$t:mypage.tabs.notifications",
+                "iconName": "bell"
+            }
+        ]
+    }
+}

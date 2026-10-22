@@ -1,0 +1,36 @@
+<partial>
+  <div class="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
+    <div class="flex flex-col gap-3">
+      <div class="flex items-start gap-3">
+        <icon name="shield-alert" size="sm" class="mt-0.5 text-rose-500"/>
+        <div class="min-w-0 flex-1">
+          <h3 class="text-base font-semibold text-slate-900 dark:text-white">$t:home.support_entry.title</h3>
+          <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">$t:home.support_entry.description</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-2">
+        <responsive on="tablet" class="grid grid-cols-2 gap-2"/>
+        <button type="button" class="flex w-full items-start gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-left transition-colors hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/40 dark:hover:border-slate-600 dark:hover:bg-slate-900 cursor-pointer">
+          <on type="click">
+            <navigate path="/board/support"/>
+          </on>
+          <icon name="message-circle-warning" size="sm" class="mt-0.5 shrink-0 text-slate-500 dark:text-slate-400"/>
+          <div class="min-w-0">
+            <span class="block text-sm font-semibold text-slate-900 dark:text-white">$t:home.support_entry.report_title</span>
+            <span class="mt-1 block text-xs text-slate-600 dark:text-slate-400">$t:home.support_entry.report_description</span>
+          </div>
+        </button>
+        <button type="button" class="flex w-full items-start gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-left transition-colors hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/40 dark:hover:border-slate-600 dark:hover:bg-slate-900 cursor-pointer">
+          <on type="click">
+            <navigate path="/page/refund"/>
+          </on>
+          <icon name="file-text" size="sm" class="mt-0.5 shrink-0 text-slate-500 dark:text-slate-400"/>
+          <div class="min-w-0">
+            <span class="block text-sm font-semibold text-slate-900 dark:text-white">$t:home.support_entry.policy_title</span>
+            <span class="mt-1 block text-xs text-slate-600 dark:text-slate-400">$t:home.support_entry.policy_description</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</partial>

@@ -1,0 +1,91 @@
+<partial>
+  <div>
+    <div class="flex flex-col sm:flex-row gap-3 mb-4">
+      <select value="{{_global.myCommentsBoard ?? ''}}" class="min-w-[120px] px-3 py-2 text-sm border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
+        <on type="change">
+          <set-state target="global" myCommentsBoard="{{$event.target.value}}" :myCommentsPage="1"/>
+          <refetch-data-source dataSourceId="myComments"/>
+        </on>
+        <option value="">$t:mypage.board_activities.filter.all_boards</option>
+        <option data-each="board in {{boards?.data ?? []}}" value="{{board.slug}}">{{board.name}}</option>
+      </select>
+      <select value="{{_global.myCommentsSort ?? 'latest'}}" class="min-w-[100px] px-3 py-2 text-sm border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
+        <on type="change">
+          <set-state target="global" myCommentsSort="{{$event.target.value}}" :myCommentsPage="1"/>
+          <refetch-data-source dataSourceId="myComments"/>
+        </on>
+        <option value="latest">$t:mypage.board_activities.sort.latest</option>
+        <option value="oldest">$t:mypage.board_activities.sort.oldest</option>
+      </select>
+      <div class="flex-1 flex gap-2">
+        <input type="text" placeholder="$t:mypage.board_activities.search_placeholder_comments" value="{{_global.myCommentsSearch ?? ''}}" class="flex-1 px-3 py-2 text-sm border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500">
+          <on type="change">
+            <set-state target="global" myCommentsSearch="{{$event.target.value}}"/>
+          </on>
+        </input>
+        <button class="px-4 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-lg text-sm font-medium hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors">
+          <on type="click">
+            <set-state target="global" :myCommentsPage="1"/>
+            <refetch-data-source dataSourceId="myComments"/>
+          </on>
+          $t:common.search
+        </button>
+        <button class="px-4 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+          <on type="click">
+            <set-state target="global" myCommentsBoard="" myCommentsSearch="" myCommentsSort="latest" :myCommentsPage="1"/>
+            <refetch-data-source dataSourceId="myComments"/>
+          </on>
+          $t:common.reset
+        </button>
+      </div>
+    </div>
+    <div data-if="{{myComments?.data?.query?.search || myComments?.data?.query?.board_slug}}" class="mb-4 p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg flex items-center justify-between">
+      <div class="flex items-center gap-2 text-sm text-teal-700 dark:text-teal-300">
+        <icon name="search" size="sm"/>
+        <span>$t:mypage.board_activities.search_result</span>
+        <span data-if="{{myComments?.data?.query?.search}}" class="font-medium">"{{myComments?.data?.query?.search}}"</span>
+        <span>$t:mypage.board_activities.search_result_count|count={{myComments?.data?.total ?? 0}}</span>
+      </div>
+      <button class="text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-200 text-sm">
+        <on type="click">
+          <set-state target="global" myCommentsBoard="" myCommentsSearch="" myCommentsSort="latest" :myCommentsPage="1"/>
+          <refetch-data-source dataSourceId="myComments"/>
+        </on>
+        $t:common.reset
+      </button>
+    </div>
+    <div class="space-y-3">
+      <div data-if="{{myComments?.data?.data &amp;&amp; myComments.data.data.length > 0}}" data-each="comment in {{myComments?.data?.data ?? []}}">
+        <button class="w-full text-left block bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-slate-300 dark:hover:border-slate-600 transition-colors cursor-pointer">
+          <on type="click">
+            <navigate path="/board/{{comment.board_slug}}/{{comment.post_id_val}}"/>
+          </on>
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex-1 min-w-0 flex items-center gap-2">
+              <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded flex-shrink-0">{{comment.board_name}}</span>
+              <span class="text-base font-medium text-slate-900 dark:text-white truncate">{{comment.post_title}}</span>
+            </div>
+            <span class="text-xs text-slate-500 dark:text-slate-400 flex-shrink-0 whitespace-nowrap" title="{{comment.created_at ?? ''}}">{{comment.created_at_formatted ?? ''}}</span>
+          </div>
+          <p data-if="{{comment.content}}" class="mt-2 text-sm text-slate-600 dark:text-slate-300 line-clamp-2">{{comment.content}}</p>
+        </button>
+      </div>
+      <div data-if="{{!myComments?.data?.data || myComments.data.data.length === 0}}" class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-8 text-center">
+        <icon name="comment" size="3x" class="mx-auto text-slate-300 dark:text-slate-600 mb-3"/>
+        <p class="text-slate-500 dark:text-slate-400">$t:mypage.board_activities.empty_comments</p>
+        <button class="inline-block mt-4 px-4 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-lg text-sm font-medium cursor-pointer hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors">
+          <on type="click">
+            <navigate path="/boards"/>
+          </on>
+          $t:mypage.board_activities.go_boards
+        </button>
+      </div>
+    </div>
+    <pagination data-type="composite" data-if="{{myComments?.data?.last_page > 1}}" currentPage="{{myComments?.data?.current_page ?? 1}}" totalPages="{{myComments?.data?.last_page ?? 1}}" class="mt-4 flex justify-center">
+      <on event="onPageChange">
+        <set-state target="global" myCommentsPage="{{$args[0]}}"/>
+        <refetch-data-source dataSourceId="myComments"/>
+      </on>
+    </pagination>
+  </div>
+</partial>

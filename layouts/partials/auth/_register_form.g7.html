@@ -1,0 +1,111 @@
+<partial>
+  <form data-key="form" id="form" class="space-y-4 relative">
+    <on type="submit">
+      <set-state target="local" :isRegistering="true" :registerError="null" :errors="null"/>
+      <api-call target="/api/auth/register" method="POST" body="{{form}}">
+        <success>
+          <set-state target="local" :isRegistering="false"/>
+          <toast type="success" message="$t:auth.register_success"/>
+          <navigate path="/login"/>
+        </success>
+        <fail>
+          <set-state target="local" :isRegistering="false" errors="{{error.response?.errors ?? error.errors}}" registerError="{{error.response?.message ?? error.message}}"/>
+        </fail>
+      </api-call>
+    </on>
+    <on event="mount">
+      <set-state if="{{!_local?.form?.language}}" target="local" form.language="{{$locale ?? 'ko'}}"/>
+    </on>
+    <div data-if="{{_local?.isRegistering}}" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
+      <div class="flex flex-col items-center gap-2">
+        <div class="w-8 h-8 border-4 border-slate-300 dark:border-slate-600 border-t-teal-500 rounded-full animate-spin"/>
+        <span class="text-sm text-slate-600 dark:text-slate-400">$t:auth.register.processing</span>
+      </div>
+    </div>
+    <div data-if="{{_local?.registerError}}" class="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+      <p class="text-sm text-red-600 dark:text-red-400">{{_local.registerError}}</p>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+        <span>$t:auth.email</span>
+        <span class="text-red-500 ml-1">$t:auth.required_mark</span>
+      </label>
+      <input type="email" name="email" placeholder="$t:auth.email_placeholder" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500" :required="true" disabled="{{_local?.isRegistering}}"/>
+      <span data-if="{{_local.errors?.email}}" class="text-red-500 text-xs mt-1">{{_local.errors?.email?.[0] ?? ''}}</span>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+        <span>$t:auth.password</span>
+        <span class="text-red-500 ml-1">$t:auth.required_mark</span>
+      </label>
+      <password-input name="password" placeholder="$t:auth.register.password_placeholder|count=8" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500" :required="true" disabled="{{_local?.isRegistering}}" :showToggle="true" :showValidation="true" error="{{_local.errors?.password?.[0] ?? ''}}">
+        <prop name="enableRules">
+          <item>minLength:8</item>
+        </prop>
+      </password-input>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+        <span>$t:auth.password_confirm</span>
+        <span class="text-red-500 ml-1">$t:auth.required_mark</span>
+      </label>
+      <password-input name="password_confirmation" placeholder="$t:auth.password_confirm_placeholder" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500" :required="true" disabled="{{_local?.isRegistering}}" :showToggle="true" :isConfirmField="true" confirmTarget="{{_local.form?.password ?? ''}}" error="{{_local.errors?.password_confirmation?.[0] ?? ''}}"/>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+        <span>$t:auth.name</span>
+        <span class="text-red-500 ml-1">$t:auth.required_mark</span>
+      </label>
+      <input type="text" name="name" placeholder="$t:auth.name_placeholder" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500" :required="true" disabled="{{_local?.isRegistering}}"/>
+      <span data-if="{{_local.errors?.name}}" class="text-red-500 text-xs mt-1">{{_local.errors?.name?.[0] ?? ''}}</span>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">$t:auth.nickname</label>
+      <input type="text" name="nickname" placeholder="$t:auth.nickname_placeholder" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500" disabled="{{_local?.isRegistering}}"/>
+      <span data-if="{{_local.errors?.nickname}}" class="text-red-500 text-xs mt-1">{{_local.errors?.nickname?.[0] ?? ''}}</span>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">$t:auth.language</label>
+      <select name="language" options="{{($locales ?? []).map(l => ({ value: l, label: _global.appConfig?.localeNames?.[l] ?? l }))}}" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500" disabled="{{_local?.isRegistering}}"/>
+    </div>
+    <div class="space-y-2 pt-2">
+      <div>
+        <div class="flex items-center gap-2">
+          <checkbox name="agree_terms" value="1" :required="true" disabled="{{_local?.isRegistering}}"/>
+          <label class="text-sm text-slate-700 dark:text-slate-300 inline-flex items-center gap-1">
+            <button type="button" class="text-teal-600 dark:text-teal-400 hover:underline cursor-pointer">
+              <on type="click">
+                <refetch-data-source dataSourceId="termsContent"/>
+                <open-modal target="termsModal"/>
+              </on>
+              $t:auth.terms
+            </button>
+            <span>$t:auth.agree_required</span>
+          </label>
+        </div>
+        <span data-if="{{_local.errors?.agree_terms}}" class="text-red-500 text-xs mt-1 ml-6">{{_local.errors?.agree_terms?.[0] ?? ''}}</span>
+      </div>
+      <div data-ref="register_privacy_agreement">
+        <div class="flex items-center gap-2">
+          <checkbox name="agree_privacy" value="1" :required="true" disabled="{{_local?.isRegistering}}"/>
+          <label class="text-sm text-slate-700 dark:text-slate-300 inline-flex items-center gap-1">
+            <button type="button" class="text-teal-600 dark:text-teal-400 hover:underline cursor-pointer">
+              <on type="click">
+                <refetch-data-source dataSourceId="privacyContent"/>
+                <open-modal target="privacyModal"/>
+              </on>
+              $t:auth.privacy
+            </button>
+            <span>$t:auth.agree_required</span>
+          </label>
+        </div>
+        <span data-if="{{_local.errors?.agree_privacy}}" class="text-red-500 text-xs mt-1 ml-6">{{_local.errors?.agree_privacy?.[0] ?? ''}}</span>
+      </div>
+    </div>
+    <button type="submit" class="w-full py-3 bg-teal-600 dark:bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2" disabled="{{_local?.isRegistering}}">
+      <div data-if="{{_local?.isRegistering}}" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"/>
+      <span data-if="{{!_local?.isRegistering}}">$t:auth.register.submit</span>
+      <span data-if="{{_local?.isRegistering}}">$t:auth.register.processing</span>
+    </button>
+  </form>
+</partial>

@@ -1,0 +1,24 @@
+{
+  "boards": {
+    "qna": {
+      "name": {
+        "ko": "상담 문의",
+        "en": "Consultation Inquiry"
+      },
+      "slug": "qna",
+      "description": {
+        "ko": "상담, 수업, 결제 및 이용 관련 문의를 남겨주세요.",
+        "en": "Ask about consultations, classes, payments, or using the academy."
+      },
+      "is_active": true,
+      "type": "basic",
+      "secret_mode": "enabled",
+      "show_view_count": true,
+      "use_report": false,
+      "use_file_upload": true,
+      "max_file_size": 5,
+      "max_file_count": 3,
+      "allowed_extensions": ["jpg", "jpeg", "png", "pdf", "zip", "txt"]
+    }
+  }
+}

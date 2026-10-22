@@ -1,0 +1,12 @@
+<partial>
+  <div>
+    <div data-if="{{(popularPosts.data ?? []).length === 0}}" class="flex flex-col items-center justify-center py-16 text-center">
+      <icon name="inbox" size="4x" class="text-slate-300 dark:text-slate-600 mb-4"/>
+      <p class="text-slate-600 dark:text-slate-400 text-lg font-medium mb-2">$t:board.popular.no_posts</p>
+      <p class="text-sm text-slate-500 dark:text-slate-500">$t:board.popular.no_posts_description</p>
+    </div>
+    <div data-if="{{(popularPosts.data ?? []).length > 0}}" data-each="post, index in {{popularPosts.data ?? []}}">
+      <include src="partials/board/popular/_popular_item.g7.html"/>
+    </div>
+  </div>
+</partial>

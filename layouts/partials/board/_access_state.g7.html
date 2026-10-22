@@ -1,0 +1,79 @@
+<partial>
+  <div data-if="{{_local.boardAccess !== 'allowed'}}" class="min-h-[50vh] flex items-center justify-center px-4">
+    <p data-if="{{_local.boardAccess === 'checking'}}" class="text-slate-600 dark:text-slate-400">$t:board.access.checking</p>
+    <div data-if="{{_local.boardAccess === 'missing'}}" class="text-center max-w-xl">
+      <icon name="settings" class="w-12 h-12 mx-auto mb-4 text-slate-400"/>
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">$t:board.access.missing_title</h1>
+      <p class="text-slate-600 dark:text-slate-400 mb-8">$t:board.access.missing_description</p>
+      <button data-if="{{_global.currentUser?.permissions?.some(permission => permission.identifier === 'sirsoft-board.boards.create') &amp;&amp; route.slug === 'qna'}}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer" disabled="{{_local.setupState === 'creating' || _local.setupState === 'already_exists'}}">
+        <on type="click">
+          <set-state target="local" setupState="creating"/>
+          <api-call :auth_required="true" target="/api/modules/sirsoft-board/admin/boards" method="POST">
+            <success>
+              <set-state target="local" setupState="success" boardAccess="checking" :setupError="null"/>
+              <toast type="success" message="$t:board.access.setup_success"/>
+              <refetch-data-source dataSourceId="boards"/>
+              <refetch-data-source dataSourceId="board_access"/>
+            </success>
+            <error-handling>
+              <on-code code="403">
+                <set-state target="local" setupState="denied"/>
+                <toast type="error" message="$t:board.access.setup_denied"/>
+              </on-code>
+              <default>
+                <set-state target="local" setupState="already_exists" boardAccess="checking"/>
+                <refetch-data-source dataSourceId="board_access"/>
+              </default>
+            </error-handling>
+            <field name="body">
+              <field name="name">
+                <field name="ko" value="{{true ? '$t:board.setup.name_ko' : ''}}"/>
+                <field name="en" value="{{true ? '$t:board.setup.name_en' : ''}}"/>
+              </field>
+              <field name="slug" value="qna"/>
+              <field name="description">
+                <field name="ko" value="{{true ? '$t:board.setup.description_ko' : ''}}"/>
+                <field name="en" value="{{true ? '$t:board.setup.description_en' : ''}}"/>
+              </field>
+              <field name="is_active" :value="true"/>
+              <field name="type" value="basic"/>
+              <field name="secret_mode" value="enabled"/>
+              <field name="show_view_count" :value="true"/>
+              <field name="use_report" :value="false"/>
+              <field name="use_file_upload" :value="true"/>
+              <field name="max_file_size" :value="5"/>
+              <field name="max_file_count" :value="3"/>
+              <field name="allowed_extensions">
+                <item>jpg</item>
+                <item>jpeg</item>
+                <item>png</item>
+                <item>pdf</item>
+                <item>zip</item>
+                <item>txt</item>
+              </field>
+              <field name="board_manager_ids">
+                <item>{{_global.currentUser.uuid}}</item>
+              </field>
+              <field name="board_step_ids" :value="[]"/>
+            </field>
+          </api-call>
+        </on>
+        <icon data-if="{{_local.setupState === 'creating' || _local.setupState === 'already_exists'}}" name="spinner" class="w-5 h-5 animate-spin"/>
+        <span>{{(_local.setupState === 'creating' || _local.setupState === 'already_exists') ? '$t:board.access.setting_up' : '$t:board.access.setup_action'}}</span>
+      </button>
+      <p data-if="{{!_global.currentUser?.permissions?.some(permission => permission.identifier === 'sirsoft-board.boards.create')}}" class="text-sm text-slate-500 dark:text-slate-400">$t:board.access.admin_setup_required</p>
+      <p data-if="{{_local.setupState === 'denied' || _local.setupState === 'failed'}}" class="mt-4 text-sm text-red-600 dark:text-red-400">{{_local.setupState === 'denied' ? '$t:board.access.setup_denied' : '$t:board.access.setup_failed'}}</p>
+    </div>
+    <div data-if="{{_local.boardAccess === 'denied'}}" class="text-center max-w-lg">
+      <icon name="lock" class="w-12 h-12 mx-auto mb-4 text-slate-400"/>
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">$t:board.access.denied_title</h1>
+      <p class="text-slate-600 dark:text-slate-400 mb-8">$t:board.access.denied_description</p>
+      <button class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 cursor-pointer">
+        <on type="click">
+          <navigate path="/"/>
+        </on>
+        $t:board.access.back_home
+      </button>
+    </div>
+  </div>
+</partial>

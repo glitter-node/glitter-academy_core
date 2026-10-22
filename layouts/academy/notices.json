@@ -1,0 +1,57 @@
+{
+  "version": "1.0.0",
+  "layout_name": "academy/notices",
+  "extends": "_user_base",
+  "meta": {
+    "title": "$t:academy.pages.notices.meta_title",
+    "description": "$t:academy.pages.notices.meta_description"
+  },
+  "data_sources": [],
+  "slots": {
+    "content": [
+      {
+        "type": "layout",
+        "name": "Container",
+        "props": {
+          "className": "py-10 px-4"
+        },
+        "children": [
+          {
+            "type": "basic",
+            "name": "H1",
+            "props": {
+              "className": "text-3xl font-bold text-slate-900 dark:text-white mb-3"
+            },
+            "text": "$t:academy.pages.notices.title"
+          },
+          {
+            "type": "basic",
+            "name": "P",
+            "props": {
+              "className": "text-lg text-slate-600 dark:text-slate-300 mb-8 max-w-3xl"
+            },
+            "text": "$t:academy.pages.notices.subtitle"
+          },
+          {
+            "type": "basic",
+            "name": "Button",
+            "props": {
+              "type": "button",
+              "className": "px-5 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            },
+            "actions": [
+              {
+                "type": "click",
+                "handler": "navigate",
+                "params": {
+                  "path": "/board/notice"
+                }
+              }
+            ],
+            "text": "$t:academy.pages.notices.board_button"
+          }
+        ]
+      }
+    ]
+  }
+}

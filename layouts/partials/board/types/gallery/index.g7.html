@@ -1,0 +1,106 @@
+<partial>
+  <div>
+    <div class="flex justify-between items-start mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">{{posts?.data?.board?.name ?? ''}}</h1>
+        <p data-if="{{posts?.data?.board?.description}}" class="text-slate-600 dark:text-slate-400 mt-1">{{posts?.data?.board?.description}}</p>
+      </div>
+      <include src="../../index/_write_button.g7.html"/>
+    </div>
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4">
+      <select data-if="{{posts?.data?.board?.categories &amp;&amp; posts?.data?.board?.categories.length > 0}}" value="{{query.category || 'all'}}" class="w-full sm:w-auto sm:min-w-48 px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white text-sm" options="{{[{value:'all', label:'$t:board.filter.category_all'},{value:'unclassified', label:'$t:board.filter.category_unclassified'}].concat((posts?.data?.board?.categories ?? []).map(function(c){return{value:c,label:c};}))}}">
+        <on type="change">
+          <navigate path="/board/{{route.slug}}" :mergeQuery="true">
+            <query category="{{$event.target.value === 'all' ? '' : $event.target.value}}" :page="1"/>
+          </navigate>
+        </on>
+      </select>
+      <button data-if="{{posts?.data?.abilities?.can_view_deleted}}" type="button" class="{{query.del === '1' ? 'inline-flex items-center gap-1.5 px-3 py-2 border-2 border-teal-600 dark:border-teal-400 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-lg text-sm font-medium' : 'inline-flex items-center gap-1.5 px-3 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg text-sm hover:bg-slate-50 dark:hover:bg-slate-700'}}">
+        <on type="click">
+          <navigate path="/board/{{route.slug}}" :mergeQuery="true">
+            <query del="{{query.del === '1' ? '' : '1'}}" :page="1"/>
+          </navigate>
+        </on>
+        <icon name="eye" size="sm"/>
+        <span>$t:board.filter.include_deleted</span>
+      </button>
+      <div class="w-full sm:w-auto sm:ml-auto">
+        <search-bar data-type="composite" name="search" placeholder="$t:board.search_placeholder" value="{{query.search || ''}}" :showButton="false" class="w-full sm:w-64">
+          <on type="submit">
+            <navigate path="/board/{{route.slug}}" :mergeQuery="true">
+              <query search="{{$event.target.search.value}}" :page="1"/>
+            </navigate>
+          </on>
+        </search-bar>
+      </div>
+    </div>
+    <grid data-type="layout" :cols="1" :gap="4" class="grid-cols-1">
+      <responsive on="tablet" :cols="2" :gap="4" class="grid-cols-2"/>
+      <responsive on="desktop" :cols="3" :gap="4" class="grid-cols-3"/>
+      <button data-each="post in {{posts?.data?.data ?? []}}" class="block w-full text-left rounded-xl shadow-sm relative aspect-[4/3] group cursor-pointer border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:border-teal-300 dark:hover:border-teal-700 transition-all duration-200">
+        <on type="click">
+          <navigate path="/board/{{route.slug}}/{{post.id}}"/>
+        </on>
+        <div class="absolute inset-0 rounded-xl overflow-hidden">
+          <img data-if="{{post?.thumbnail}}" src="{{post?.thumbnail}}" alt="{{post?.title}}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"/>
+          <div data-if="{{!post?.thumbnail}}" class="w-full h-full bg-slate-700 dark:bg-slate-800 flex items-center justify-center">
+            <icon name="image" size="2x" class="text-slate-400 dark:text-slate-500"/>
+          </div>
+        </div>
+        <div data-if="{{post?.status === 'blinded' || post?.deleted_at}}" class="absolute inset-0 bg-slate-900/40 z-10"/>
+        <div data-if="{{post?.is_secret &amp;&amp; !post?.abilities?.can_view}}" class="absolute inset-0 bg-slate-900/50 flex items-center justify-center z-10">
+          <icon name="lock" size="2x" class="text-white"/>
+        </div>
+        <div data-if="{{post?.category || post?.is_notice || post?.is_new}}" class="absolute inset-x-0 top-0 flex items-start justify-between p-2 z-20">
+          <div class="flex items-center gap-1 flex-wrap">
+            <span data-if="{{post?.is_notice}}" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-sm font-bold bg-teal-600 text-white dark:bg-teal-500 flex-shrink-0">
+              <icon name="bell" size="xs" class="text-white"/>
+              <span>$t:board.notice</span>
+            </span>
+            <span data-if="{{post?.category}}" class="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-black/40 text-white backdrop-blur-sm flex-shrink-0">{{post?.category}}</span>
+          </div>
+          <span data-if="{{post?.is_new}}" class="px-1.5 py-0.5 text-xs font-bold bg-red-500 text-white rounded flex-shrink-0">$t:board.new_badge_short</span>
+        </div>
+        <div class="absolute inset-x-0 bottom-0 z-30 px-3 pt-10 pb-3 rounded-b-xl bg-gradient-to-t from-black/90 via-black/60 to-transparent">
+          <div class="flex items-center gap-1.5 min-w-0 mb-1.5">
+            <icon data-if="{{post?.status === 'blinded'}}" name="eye-slash" size="sm" class="text-orange-300 flex-shrink-0"/>
+            <span data-if="{{post?.is_reply}}" class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-teal-500/80 text-white flex-shrink-0">$t:board.reply_badge_short</span>
+            <icon data-if="{{post?.is_secret}}" name="lock" size="sm" class="text-slate-300 flex-shrink-0"/>
+            <span class="text-base font-semibold truncate transition-colors {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400' : 'text-white'}}">{{post?.title}}</span>
+            <icon data-if="{{post?.has_attachment}}" name="paperclip" size="sm" class="text-slate-300 flex-shrink-0"/>
+            <span data-if="{{post?.deleted_at}}" class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 flex-shrink-0">$t:board.post.deleted_badge</span>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <avatar data-type="composite" author="{{post?.author}}" size="xs" class="{{(post?.status === 'blinded' || post?.deleted_at) ? 'opacity-40' : ''}}"/>
+              <user-info data-type="composite" author="{{post?.author}}" :showDropdown="true" :stopPropagation="true" class="text-xs font-medium {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400' : 'text-slate-200'}}"/>
+              <span class="text-slate-400 flex-shrink-0">·</span>
+              <span class="flex-shrink-0 {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400' : 'text-slate-300'}}" title="{{post?.created_at ?? ''}}">{{post?.created_at_formatted ?? ''}}</span>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <span class="flex items-center gap-0.5 {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400' : 'text-slate-300'}}">
+                <icon name="eye" size="xs"/>
+                <span>{{post?.view_count ?? 0}}</span>
+              </span>
+              <span data-if="{{post?.comment_count > 0}}" class="flex items-center gap-0.5 {{(post?.status === 'blinded' || post?.deleted_at) ? 'text-slate-400' : 'text-teal-300'}}">
+                <icon name="message" size="xs"/>
+                <span>{{post?.comment_count ?? 0}}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </button>
+    </grid>
+    <include src="../../index/_empty_states.g7.html"/>
+    <pagination data-type="composite" currentPage="{{posts?.data?.pagination?.current_page ?? 1}}" totalPages="{{posts?.data?.pagination?.last_page ?? 1}}" class="mt-6 justify-center">
+      <on event="onPageChange">
+        <navigate path="/board/{{route?.slug}}" :mergeQuery="true">
+          <query page="{{$args[0]}}" category="{{query.category}}" filters[0][field]="{{query['filters[0][field]']}}" filters[0][value]="{{query['filters[0][value]']}}" filters[0][operator]="{{query['filters[0][operator]']}}"/>
+        </navigate>
+      </on>
+    </pagination>
+    <div class="flex justify-end mt-4">
+      <include src="../../index/_write_button.g7.html"/>
+    </div>
+  </div>
+</partial>

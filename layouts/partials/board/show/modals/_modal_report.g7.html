@@ -1,0 +1,106 @@
+<partial>
+  <modal data-type="composite" data-ref="board_report_modal" id="board_report_modal" title="{{_global.reportModal.type === 'comment' ? '$t:board.post.report_comment' : '$t:board.post.report_post'}}" size="lg">
+    <div class="space-y-4">
+      <div class="p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg">
+        <div class="flex items-start gap-3">
+          <icon data-type="composite" name="info-circle" size="lg" class="text-orange-600 dark:text-orange-500 flex-shrink-0 mt-0.5"/>
+          <div>
+            <p class="text-sm font-medium text-orange-800 dark:text-orange-200 mb-1">$t:board.post.report_notice_title</p>
+            <p class="text-sm text-orange-700 dark:text-orange-300">$t:board.post.report_notice_content</p>
+          </div>
+        </div>
+      </div>
+      <div data-if="{{_global.reportModal.type === 'comment' &amp;&amp; _global.reportModal.comment_content}}" class="p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg">
+        <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-2">$t:board.post.report_target_comment</p>
+        <div data-if="{{_global.reportModal.comment_author_name}}" class="flex items-center gap-2 mb-2">
+          <avatar data-type="composite" name="{{_global.reportModal.comment_author_name}}" avatar="{{_global.reportModal.comment_author_avatar}}" size="xs"/>
+          <span class="text-xs font-medium text-slate-600 dark:text-slate-400">{{_global.reportModal.comment_author_name}}</span>
+          <span class="text-xs text-slate-400 dark:text-slate-500/80">{{_global.reportModal.comment_created_at}}</span>
+        </div>
+        <p class="text-sm text-slate-700 dark:text-slate-300 line-clamp-3">{{_global.reportModal.comment_content}}</p>
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">$t:board.post.report_reason</label>
+        <select value="{{_global.reportForm?.reason_type ?? ''}}" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+          <on type="change">
+            <set-state target="global">
+              <field name="reportForm">
+                <field name="reason_type" value="{{$event.target.value}}"/>
+              </field>
+            </set-state>
+          </on>
+          <option value="" :selected="true">$t:board.post.select_reason</option>
+          <option data-each="type, idx in {{post?.data?.board?.report_types ?? []}}" value="{{type.value}}">{{type.label}}</option>
+        </select>
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">$t:board.post.report_detail</label>
+        <textarea placeholder="$t:board.post.report_detail_placeholder" value="{{_global.reportForm?.reason_detail ?? ''}}" :rows="4" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none" :minLength="3" :maxLength="1000">
+          <on type="change">
+            <set-state target="global">
+              <field name="reportForm">
+                <field name="reason_detail" value="{{$event.target.value}}"/>
+              </field>
+            </set-state>
+          </on>
+        </textarea>
+      </div>
+      <div class="flex justify-end gap-2 mt-6">
+        <button class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer">
+          <on type="click">
+            <set-state target="global">
+              <field name="reportForm">
+                <field name="reason_type" value=""/>
+                <field name="reason_detail" value=""/>
+              </field>
+            </set-state>
+            <close-modal/>
+          </on>
+          $t:common.cancel
+        </button>
+        <button class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" disabled="{{_global.reportSubmitting === true}}">
+          <on type="click">
+            <conditions if="{{_global.reportSubmitting !== true}}">
+              <when if="{{!_global.reportForm?.reason_type}}">
+                <toast type="error" message="$t:board.post.report_reason_required"/>
+              </when>
+              <when if="{{!_global.reportForm?.reason_detail?.trim()}}">
+                <toast type="error" message="$t:board.post.report_detail_required"/>
+              </when>
+              <else>
+                <set-state target="global" :reportSubmitting="true"/>
+                <api-call target="{{_global.reportModal?.apiEndpoint}}" :auth_required="true" method="POST">
+                  <success>
+                    <set-state target="global" :reportSubmitting="false">
+                      <field name="reportForm">
+                        <field name="reason_type" value=""/>
+                        <field name="reason_detail" value=""/>
+                      </field>
+                    </set-state>
+                    <set-state target="global">
+                      <field name="reportModal">
+                        <field name="type" :value="null"/>
+                        <field name="apiEndpoint" value=""/>
+                      </field>
+                    </set-state>
+                    <toast type="success" message="$t:board.post.report_submitted"/>
+                    <close-modal/>
+                  </success>
+                  <fail>
+                    <set-state target="global" :reportSubmitting="false"/>
+                    <toast type="error" message="{{error.message}}"/>
+                  </fail>
+                  <body reason_type="{{_global.reportForm?.reason_type}}" reason_detail="{{_global.reportForm?.reason_detail}}"/>
+                </api-call>
+              </else>
+            </conditions>
+          </on>
+          <div class="flex items-center gap-2">
+            <icon data-type="composite" data-if="{{_global.reportSubmitting}}" name="spinner" size="sm" class="animate-spin"/>
+            <span>$t:board.post.submit_report</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </modal>
+</partial>

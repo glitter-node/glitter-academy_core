@@ -1,0 +1,50 @@
+<partial>
+  <div data-if="{{(post?.data?.attachments?.length ?? 0) > 0}}" class="mb-6 border-b border-slate-200 dark:border-slate-700 px-6 pt-4">
+    <div class="flex items-center justify-between cursor-pointer mb-3">
+      <on type="click">
+        <set-state target="local" showAttachments="{{_local.showAttachments === false ? true : false}}"/>
+      </on>
+      <div class="flex items-center gap-2">
+        <icon data-type="composite" name="paperclip" size="lg" class="text-slate-600 dark:text-slate-400"/>
+        <h3 class="text-sm font-semibold text-slate-900 dark:text-white">$t:board.attachments.title</h3>
+        <span class="ml-1 px-1.5 py-0.5 text-xs font-medium bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 rounded">{{post?.data?.attachments?.length ?? 0}}</span>
+      </div>
+      <icon data-type="composite" name="{{_local.showAttachments === false ? 'chevron-down' : 'chevron-up'}}" size="lg" class="text-slate-500 dark:text-slate-400"/>
+    </div>
+    <div data-if="{{_local.showAttachments !== false}}" data-each="attachment in {{post?.data?.attachments ?? []}}" class="space-y-2 mb-2">
+      <a data-if="{{post?.data?.abilities?.can_download === true}}" href="{{attachment?.download_url}}" class="group flex items-center gap-3 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-teal-400 dark:hover:border-teal-600 hover:shadow-md transition-all cursor-pointer no-underline">
+        <div data-if="{{attachment?.is_image}}" class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700">
+          <img src="{{attachment?.preview_url}}" alt="{{attachment?.original_filename}}" class="w-full h-full object-cover"/>
+        </div>
+        <div data-if="{{!attachment?.is_image}}" class="flex-shrink-0 w-16 h-16 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+          <icon data-type="composite" name="file" class="text-3xl text-slate-400 dark:text-slate-500"/>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-slate-900 dark:text-white truncate mb-1">{{attachment?.original_filename}}</div>
+          <div class="text-xs text-slate-500 dark:text-slate-400">{{attachment?.size_formatted}}</div>
+        </div>
+        <div class="flex-shrink-0">
+          <icon data-type="composite" name="download" size="lg" class="text-slate-400 dark:text-slate-500 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors"/>
+        </div>
+      </a>
+      <div data-if="{{post?.data?.abilities?.can_download !== true}}" class="group flex items-center gap-3 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all cursor-pointer">
+        <on type="click">
+          <toast type="warning" message="$t:board.attachments.download_no_permission"/>
+        </on>
+        <div data-if="{{attachment?.is_image}}" class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700">
+          <img src="{{attachment?.preview_url}}" alt="{{attachment?.original_filename}}" class="w-full h-full object-cover"/>
+        </div>
+        <div data-if="{{!attachment?.is_image}}" class="flex-shrink-0 w-16 h-16 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+          <icon data-type="composite" name="file" class="text-3xl text-slate-400 dark:text-slate-500"/>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-slate-900 dark:text-white truncate mb-1">{{attachment?.original_filename}}</div>
+          <div class="text-xs text-slate-500 dark:text-slate-400">{{attachment?.size_formatted}}</div>
+        </div>
+        <div class="flex-shrink-0">
+          <icon data-type="composite" name="download" size="lg" class="text-slate-300 dark:text-slate-600"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</partial>

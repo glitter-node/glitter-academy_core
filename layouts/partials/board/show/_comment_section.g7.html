@@ -1,0 +1,46 @@
+<partial>
+  <div class="bg-white dark:bg-slate-800 rounded-lg shadow">
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white flex items-center justify-between px-6 pt-6 pb-4">
+      <div class="flex items-center gap-2">
+        <icon data-type="composite" name="message-square" size="lg"/>
+        <span>$t:board.comments</span>
+        <span>{{(post?.data?.comments ?? []).length}}</span>
+      </div>
+      <button data-if="{{post?.data?.abilities?.can_manage}}" type="button" class="{{query.del_cmt === '1' ? 'inline-flex items-center gap-1.5 px-3 py-2 border-2 border-teal-600 dark:border-teal-400 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-lg text-sm font-medium' : 'inline-flex items-center gap-1.5 px-3 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg text-sm hover:bg-slate-50 dark:hover:bg-slate-700'}}">
+        <on type="click">
+          <navigate path="/board/{{route.slug}}/{{route.id}}" :mergeQuery="true">
+            <query del_cmt="{{query.del_cmt === '1' ? '' : '1'}}"/>
+          </navigate>
+        </on>
+        <icon name="eye" size="sm"/>
+        <span>$t:board.filter.include_deleted_comments</span>
+      </button>
+    </h3>
+    <div class="border-b border-slate-200 dark:border-slate-700"/>
+    <div data-if="{{(post?.data?.comments ?? []).length === 0 &amp;&amp; post?.data?.abilities?.can_write_comments &amp;&amp; post?.data?.status !== 'blinded'}}" class="px-6 py-8 text-center">
+      <icon data-type="composite" name="message-square" size="xl" class="mx-auto text-slate-300 dark:text-slate-600 mb-3"/>
+      <p class="text-slate-500 dark:text-slate-400">$t:board.no_comments_yet</p>
+    </div>
+    <div data-each="comment, idx in {{post?.data?.comments ?? []}}" class="space-y-4">
+      <div data-if="{{(comment?.depth ?? 0) === 0 || (_local.collapsedReplies?.[$computed.commentRootMap?.[comment?.id]] === false)}}" class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors {{(comment?.depth ?? 0) > 0 ? 'bg-slate-50 dark:bg-slate-900/50' : ''}}">
+        <include src="partials/board/show/_comment_item.g7.html"/>
+        <button data-if="{{(comment?.replies_count ?? 0) > 0 &amp;&amp; (comment?.depth ?? 0) === 0}}" class="ml-16 mb-2 text-sm text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 flex items-center gap-1">
+          <on type="click">
+            <set-state target="local" collapsedReplies="{{Object.assign({}, _local.collapsedReplies || {}, {[comment?.id]: !(_local.collapsedReplies?.[comment?.id] ?? true)})}}"/>
+          </on>
+          <icon data-type="composite" name="{{_local.collapsedReplies?.[comment?.id] === false ? 'chevron-up' : 'chevron-down'}}" size="sm"/>
+          <span>$t:board.replies_toggle|action={{_local.collapsedReplies?.[comment?.id] === false ? '$t:board.hide_replies' : '$t:board.show_replies'}}|count={{comment?.replies_count}}</span>
+        </button>
+      </div>
+    </div>
+    <div data-if="{{post?.data?.status === 'blinded' &amp;&amp; post?.data?.abilities?.can_read_comments}}" class="px-6 py-8 text-center border-t border-slate-200 dark:border-slate-700">
+      <icon data-type="composite" name="eye-slash" size="xl" class="mx-auto text-slate-300 dark:text-slate-600 mb-5"/>
+      <p class="text-slate-500 dark:text-slate-400">$t:board.blinded_comment_disabled</p>
+    </div>
+    <div data-if="{{post?.data?.abilities?.can_read_comments &amp;&amp; !post?.data?.abilities?.can_write_comments &amp;&amp; post?.data?.status !== 'blinded'}}" class="px-6 py-8 text-center border-t border-slate-200 dark:border-slate-700">
+      <icon data-type="composite" name="lock" size="xl" class="mx-auto text-slate-300 dark:text-slate-600 mb-3"/>
+      <p class="text-slate-500 dark:text-slate-400">$t:board.no_comment_write_permission</p>
+    </div>
+    <include src="partials/board/show/_comment_input.g7.html"/>
+  </div>
+</partial>
